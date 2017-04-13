@@ -126,7 +126,6 @@ function decorateTag(
 export function activate(context: vscode.ExtensionContext) {
     let activeDecoration: vscode.TextEditorDecorationType = null
     const config = vscode.workspace.getConfiguration('highlight-matching-tag')
-    console.log(JSON.stringify(config))
 
     vscode.window.onDidChangeTextEditorSelection(() => {
         if (!config.get('enabled')) return
