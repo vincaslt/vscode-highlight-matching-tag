@@ -21,11 +21,7 @@ function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag 
     const lineTextBefore = lineText.slice(0, position.character)
     const openingCharIndex = lineTextBefore.lastIndexOf('<')
 
-    let endCharIndex = lineText.indexOf(' ', openingCharIndex)
-    if (endCharIndex === -1) {
-        endCharIndex = lineText.indexOf('>', openingCharIndex)
-        endCharIndex = endCharIndex !== -1 ? endCharIndex + 1 : -1
-    }
+    let endCharIndex = lineText.indexOf('>', openingCharIndex) + 1
 
     let startPos = null
     let endPos = null
@@ -37,7 +33,7 @@ function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag 
     }
 
 
-    const tagString = range ? editor.document.getText(range).replace('<', '').replace('>', '') : ''
+    const tagString = range ? editor.document.getText(range).split(' ')[0].replace('<', '').replace('>', '') : ''
 
     return {
         name: tagString,
@@ -105,7 +101,7 @@ function decorateTag(editor: vscode.TextEditor, tag: Tag): vscode.TextEditorDeco
         ];
         const decorationType = vscode.window.createTextEditorDecorationType({
             borderWidth: '0 1px',
-            borderStyle: 'solid',
+            borderStyle: 'dotted',
             borderColor: 'white',
             borderRadius: '5px'
         })
