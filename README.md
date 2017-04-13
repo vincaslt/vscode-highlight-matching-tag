@@ -4,7 +4,7 @@ This extension is intended to provide the missing functionality that should be b
 
 ## Features
 
-\!\[highlighting\]\(rec.gif\)
+![highlighting](rec.gif)
 
 ## Extension Settings
 
