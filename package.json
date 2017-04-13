@@ -2,8 +2,8 @@
     "name": "higlight-matching-tag",
     "displayName": "higlight-matching-tag",
     "description": "Highlights matching closing or opening tag",
-    "version": "0.0.1",
-    "publisher": "vincaslt",
+    "version": "0.1.1",
+    "publisher": "Vincas Stonys",
     "engines": {
         "vscode": "^1.10.0"
     },

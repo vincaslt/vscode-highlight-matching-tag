@@ -4,7 +4,7 @@ This extension is intended to provide the missing functionality that should be b
 
 ## Features
 
-![highlighting](rec.gif)
+![demo](https://i.imgbox.com/PBPdzgyH.gif)
 
 ## Extension Settings
 
