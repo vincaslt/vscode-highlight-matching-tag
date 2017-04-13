@@ -52,19 +52,38 @@ function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag 
 function findClosingTag(editor: vscode.TextEditor, tag: Tag) {
     const getTextAfter = (pos: vscode.Position) => editor.document.getText().slice(editor.document.offsetAt(pos))
 
-    vscode.window.showInformationMessage(editor.document.positionAt(
-            editor.document.offsetAt(tag.opening.end) +
-            getTextAfter(tag.opening.end).indexOf(`</${tag.name}`)
-        ).character.toString())
+    const getClosingTag = (tag) => {
+        const textAfter = getTextAfter(tag.opening.end)
+        let nextClosingIndex = textAfter.indexOf(`</${tag.name}`)
+        let nextSameOpeningIndex = textAfter.indexOf(`<${tag.name}`)
 
-    // FIXME: not so naive
-    return {
-        ...tag,
-        closing: identifyTag(editor, editor.document.positionAt(
+        let newTag: Tag = null
+        if (nextSameOpeningIndex !== -1 && nextClosingIndex > nextSameOpeningIndex) {
+            newTag = findClosingTag(editor, identifyTag(editor, editor.document.positionAt(
+                editor.document.offsetAt(tag.opening.end) +
+                nextSameOpeningIndex +
+                1
+            )))
+            return getClosingTag({
+                name: tag.name,
+                opening: newTag.closing
+            })
+        }
+
+        const foundTag = identifyTag(editor, editor.document.positionAt(
             editor.document.offsetAt(tag.opening.end) +
-            getTextAfter(tag.opening.end).indexOf(`</${tag.name}`) +
+            nextClosingIndex +
             2
         )).opening
+        return {
+            name: tag.name,
+            opening: foundTag
+        }
+    }
+
+    return {
+        ...tag,
+        closing: getClosingTag(tag).opening
     }
 }
 
@@ -75,7 +94,7 @@ function findCurrentTag(editor: vscode.TextEditor): Tag {
         return findClosingTag(editor, currentTag)
     }
 
-    return null // FIXME: yet
+    return null // TODO: closing
 }
 
 function decorateTag(editor: vscode.TextEditor, tag: Tag): vscode.TextEditorDecorationType {
@@ -85,9 +104,9 @@ function decorateTag(editor: vscode.TextEditor, tag: Tag): vscode.TextEditorDeco
             { range: tag.closing.range }
         ];
         const decorationType = vscode.window.createTextEditorDecorationType({
-            borderWidth: '0 2px',
+            borderWidth: '0 1px',
             borderStyle: 'solid',
-            borderColor: 'yellow',
+            borderColor: 'white',
             borderRadius: '5px'
         })
         editor.setDecorations(decorationType, decoration)
