@@ -32,20 +32,33 @@ function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag 
         range = new vscode.Range(startPos, endPos)
     }
 
+    const tagString: string = range ? editor.document.getText(range) : ''
+    const tagName = tagString.split(' ')[0]
+        .replace('<', '')
+        .replace('/>', '')
+        .replace('>', '')
 
-    const tagString = range ? editor.document.getText(range).split(' ')[0].replace('<', '').replace('>', '') : ''
-
-    return {
-        name: tagString,
+    const identifiedTag: Tag = {
+        name: tagName,
         opening: {
             start: startPos,
             end: endPos,
             range
         }
     }
+
+    if (tagString.endsWith('/>')) {
+        identifiedTag.closing = identifiedTag.opening
+    }
+
+    return identifiedTag
 }
 
 function findClosingTag(editor: vscode.TextEditor, tag: Tag) {
+    if (tag.closing) {
+        return tag
+    }
+
     const getTextAfter = (pos: vscode.Position) => editor.document.getText().slice(editor.document.offsetAt(pos))
 
     const getClosingTag = (tag) => {
@@ -57,8 +70,7 @@ function findClosingTag(editor: vscode.TextEditor, tag: Tag) {
         if (nextSameOpeningIndex !== -1 && nextClosingIndex > nextSameOpeningIndex) {
             newTag = findClosingTag(editor, identifyTag(editor, editor.document.positionAt(
                 editor.document.offsetAt(tag.opening.end) +
-                nextSameOpeningIndex +
-                1
+                nextSameOpeningIndex + 1
             )))
             return getClosingTag({
                 name: tag.name,
@@ -68,8 +80,7 @@ function findClosingTag(editor: vscode.TextEditor, tag: Tag) {
 
         const foundTag = identifyTag(editor, editor.document.positionAt(
             editor.document.offsetAt(tag.opening.end) +
-            nextClosingIndex +
-            2
+            nextClosingIndex + 2
         )).opening
         return {
             name: tag.name,
@@ -93,18 +104,18 @@ function findCurrentTag(editor: vscode.TextEditor): Tag {
     return null // TODO: closing
 }
 
-function decorateTag(editor: vscode.TextEditor, tag: Tag): vscode.TextEditorDecorationType {
-    if (tag.opening.range !== null && tag.closing.range !== null) {
+function decorateTag(
+    editor: vscode.TextEditor,
+    tag: Tag,
+    config: vscode.WorkspaceConfiguration
+): vscode.TextEditorDecorationType {
+    const disabled = !config.get('highlightSelfClosing') && tag.closing === tag.opening
+    if (!disabled && tag.opening.range !== null && tag.closing.range !== null) {
         const decoration: vscode.DecorationOptions[] = [
             { range: tag.opening.range },
             { range: tag.closing.range }
         ];
-        const decorationType = vscode.window.createTextEditorDecorationType({
-            borderWidth: '0 1px',
-            borderStyle: 'dotted',
-            borderColor: 'white',
-            borderRadius: '5px'
-        })
+        const decorationType = vscode.window.createTextEditorDecorationType(config.get('style'))
         editor.setDecorations(decorationType, decoration)
         return decorationType
     }
@@ -114,22 +125,24 @@ function decorateTag(editor: vscode.TextEditor, tag: Tag): vscode.TextEditorDeco
 
 export function activate(context: vscode.ExtensionContext) {
     let activeDecoration: vscode.TextEditorDecorationType = null
+    const config = vscode.workspace.getConfiguration('highlight-matching-tag')
+    console.log(JSON.stringify(config))
 
     vscode.window.onDidChangeTextEditorSelection(() => {
+        if (!config.get('enabled')) return
+
         let editor = vscode.window.activeTextEditor
 
         if (activeDecoration) {
             activeDecoration.dispose()
         }
 
-        activeDecoration = decorateTag(editor, findCurrentTag(editor))
+        activeDecoration = decorateTag(
+            editor,
+            findCurrentTag(editor),
+            config
+        )
     })
-
-    let disposable = vscode.commands.registerCommand('highlight-matching-tag.highlight', () => {
-        
-    })
-
-    context.subscriptions.push(disposable)
 }
 
 export function deactivate() {

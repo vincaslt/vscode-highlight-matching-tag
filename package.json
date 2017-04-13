@@ -15,15 +15,30 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
-        "commands": [{
-            "command": "highlight-matching-tag.highlight",
-            "title": "Highlight matching opening or closing tag"
-        }],
         "configuration": {
-            "highlight-matching-tag.enabled": {
-                "type": "boolean",
-                "default": "true",
-                "description": "Enable or disable the highlighting."
+            "type": "object",
+            "title": "Highlight matching tag configuration",
+            "properties": {
+                "highlight-matching-tag.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable or disable the highlighting."
+                },
+                "highlight-matching-tag.highlightSelfClosing": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Should self-closing tags be highlighted"
+                },
+                "highlight-matching-tag.style": {
+                    "type": "object",
+                    "default": {
+                        "borderWidth": "0 1px",
+                        "borderStyle": "dotted",
+                        "borderColor": "white",
+                        "borderRadius": "5px"
+                    },
+                    "description": "Style to use for matching tags"
+                }
             }
         }
     },
