@@ -3,7 +3,7 @@
     "displayName": "higlight-matching-tag",
     "description": "Highlights matching closing or opening tag",
     "version": "0.1.1",
-    "publisher": "Vincas Stonys",
+    "publisher": "vincaslt",
     "engines": {
         "vscode": "^1.10.0"
     },
