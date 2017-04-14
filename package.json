@@ -2,8 +2,12 @@
     "name": "highlight-matching-tag",
     "displayName": "highlight-matching-tag",
     "description": "Highlights matching closing or opening tag",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "publisher": "vincaslt",
+    "icon": "icon.png",
+    "repository": {
+        "url": "https://github.com/vincaslt/vscode-highlight-matching-tag"
+    },
     "engines": {
         "vscode": "^1.10.0"
     },

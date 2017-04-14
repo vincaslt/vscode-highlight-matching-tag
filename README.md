@@ -1,12 +1,14 @@
 # highlight-matching-tag
 
+![logo](https://i.imgbox.com/eZAMmnap.png)
+
 Repo: https://github.com/vincaslt/vscode-highlight-matching-tag
 
 This extension is intended to provide the missing functionality that should be built-in out of the box in VSCode - to highlight matching opening or closing tags.
 
 ## Features
 
-![demo](https://i.imgbox.com/PBPdzgyH.gif)
+![demo](https://i.imgbox.com/iIMnrqFm.gif)
 
 ## Extension Settings
 
