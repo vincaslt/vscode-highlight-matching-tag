@@ -14,26 +14,39 @@ interface Tag {
     closing?: TagPosition
 }
 
+interface Decorations {
+    left: vscode.TextEditorDecorationType
+    right: vscode.TextEditorDecorationType
+    highlight: vscode.TextEditorDecorationType
+}
+
+function getTextAfter(editor: vscode.TextEditor, pos: vscode.Position): string {
+    return editor.document.getText().slice(editor.document.offsetAt(pos))
+}
+
+function getTextBefore(editor: vscode.TextEditor, pos: vscode.Position): string {
+    return editor.document.getText().slice(0, editor.document.offsetAt(pos))
+}
 
 function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag {
-    // TODO: lines above
-    const lineText = editor.document.lineAt(position.line).text
-    const lineTextBefore = lineText.slice(0, position.character)
-    const openingCharIndex = lineTextBefore.lastIndexOf('<')
+    const positionOffset = editor.document.offsetAt(position)
+    const textBefore = getTextBefore(editor, position)
 
-    let endCharIndex = lineText.indexOf('>', openingCharIndex) + 1
+    const openingCharIndex = textBefore.lastIndexOf('<')
+    const endCharIndex = positionOffset +
+        getTextAfter(editor, position).indexOf('>', openingCharIndex - positionOffset) + 1
 
     let startPos = null
     let endPos = null
     let range = null
-    if (openingCharIndex !== -1 && endCharIndex !== -1 && endCharIndex > position.character) {
-        startPos = new vscode.Position(position.line, openingCharIndex)
-        endPos = new vscode.Position(position.line, endCharIndex)
+    if (openingCharIndex !== -1 && endCharIndex !== -1 && endCharIndex > positionOffset) {
+        startPos = editor.document.positionAt(openingCharIndex)
+        endPos = editor.document.positionAt(endCharIndex)
         range = new vscode.Range(startPos, endPos)
     }
 
     const tagString: string = range ? editor.document.getText(range) : ''
-    const tagName = tagString.split(' ')[0]
+    const tagName = tagString.trim().split(/\s/)[0]
         .replace('<', '')
         .replace('/>', '')
         .replace('>', '')
@@ -59,10 +72,8 @@ function findClosingTag(editor: vscode.TextEditor, tag: Tag) {
         return tag
     }
 
-    const getTextAfter = (pos: vscode.Position) => editor.document.getText().slice(editor.document.offsetAt(pos))
-
     const getClosingTag = (tag) => {
-        const textAfter = getTextAfter(tag.opening.end)
+        const textAfter = getTextAfter(editor, tag.opening.end)
         let nextClosingIndex = textAfter.indexOf(`</${tag.name}`)
         let nextSameOpeningIndex = textAfter.indexOf(`<${tag.name}`)
 
@@ -108,23 +119,35 @@ function decorateTag(
     editor: vscode.TextEditor,
     tag: Tag,
     config: vscode.WorkspaceConfiguration
-): vscode.TextEditorDecorationType {
+): Decorations {
     const disabled = !config.get('highlightSelfClosing') && tag.closing === tag.opening
     if (!disabled && tag.opening.range !== null && tag.closing.range !== null) {
-        const decoration: vscode.DecorationOptions[] = [
-            { range: tag.opening.range },
-            { range: tag.closing.range }
+        const leftDecoration: vscode.DecorationOptions[] = [
+            { range: new vscode.Range(tag.opening.start, tag.opening.start.translate(0, 1)) },
+            { range: new vscode.Range(tag.closing.start, tag.closing.start.translate(0, 1)) }
         ];
-        const decorationType = vscode.window.createTextEditorDecorationType(config.get('style'))
-        editor.setDecorations(decorationType, decoration)
-        return decorationType
+        const rightDecoration: vscode.DecorationOptions[] = [
+            { range: new vscode.Range(tag.opening.end, tag.opening.end.translate(0, -1)) },
+            { range: new vscode.Range(tag.closing.end, tag.closing.end.translate(0, -1)) }
+        ];
+        const highlightDecoration: vscode.DecorationOptions[] = [
+            { range: new vscode.Range(tag.opening.start, tag.opening.end) },
+            { range: new vscode.Range(tag.closing.start, tag.closing.end) }
+        ];
+        const highlightDecorationType = vscode.window.createTextEditorDecorationType(config.get('style'))
+        const leftDecorationType = vscode.window.createTextEditorDecorationType(config.get('leftStyle'))
+        const rightDecorationType = vscode.window.createTextEditorDecorationType(config.get('rightStyle'))
+        editor.setDecorations(leftDecorationType, leftDecoration)
+        editor.setDecorations(rightDecorationType, rightDecoration)
+        editor.setDecorations(highlightDecorationType, highlightDecoration)
+        return { left: leftDecorationType, right: rightDecorationType, highlight: highlightDecorationType }
     }
 
     return null
 }
 
 export function activate(context: vscode.ExtensionContext) {
-    let activeDecoration: vscode.TextEditorDecorationType = null
+    let activeDecorations: Decorations = null
     const config = vscode.workspace.getConfiguration('highlight-matching-tag')
 
     vscode.window.onDidChangeTextEditorSelection(() => {
@@ -132,11 +155,17 @@ export function activate(context: vscode.ExtensionContext) {
 
         let editor = vscode.window.activeTextEditor
 
-        if (activeDecoration) {
-            activeDecoration.dispose()
+
+        const dispose = (decoration: vscode.TextEditorDecorationType) => {
+            if (decoration) return decoration.dispose()
+        }
+        if (activeDecorations) {
+            dispose(activeDecorations.left)
+            dispose(activeDecorations.right)
+            dispose(activeDecorations.highlight)
         }
 
-        activeDecoration = decorateTag(
+        activeDecorations = decorateTag(
             editor,
             findCurrentTag(editor),
             config
