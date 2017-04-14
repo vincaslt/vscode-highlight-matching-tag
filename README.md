@@ -37,7 +37,7 @@ __Example:__
 }
 ```
 
-* `highlight-matching-tag.leftStyle` - (TextEditorDecorationType: default see example). See above property, it is the same, but for right side.
+* `highlight-matching-tag.rightStyle` - (TextEditorDecorationType: default see example). See above property, it is the same, but for right side.
 
 __Example:__
 
