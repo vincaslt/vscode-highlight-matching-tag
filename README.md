@@ -73,7 +73,7 @@ __Example:__
 
 ## Known Issues
 
-* Only works on opening tags yet
+* If > symbol is used inside of tag, but not as an actual ending of the tag (i.e. inline js compare) it is likely to be mistaken for the tag's ending
 
 ## Release Notes
 
@@ -86,3 +86,7 @@ __Example:__
 * Highlight multiline tags correctly
 * Options for customizing left-right sides of highlighting
 * Documentation updates
+
+### 0.3.0
+
+* Match opening tag from closing tag

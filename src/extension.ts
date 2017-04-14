@@ -33,13 +33,14 @@ function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag 
     const textBefore = getTextBefore(editor, position)
 
     const openingCharIndex = textBefore.lastIndexOf('<')
+    const isOverBefore = textBefore.lastIndexOf('>') > openingCharIndex
     const endCharIndex = positionOffset +
         getTextAfter(editor, position).indexOf('>', openingCharIndex - positionOffset) + 1
 
     let startPos = null
     let endPos = null
     let range = null
-    if (openingCharIndex !== -1 && endCharIndex !== -1 && endCharIndex > positionOffset) {
+    if (!isOverBefore && openingCharIndex !== -1 && endCharIndex !== -1 && endCharIndex > positionOffset) {
         startPos = editor.document.positionAt(openingCharIndex)
         endPos = editor.document.positionAt(endCharIndex)
         range = new vscode.Range(startPos, endPos)
@@ -105,14 +106,36 @@ function findClosingTag(editor: vscode.TextEditor, tag: Tag) {
     }
 }
 
+function findOpeningTag(editor: vscode.TextEditor, tag: Tag): Tag {
+    const findOpeningTagByPosition = (position: vscode.Position) => {
+        const beforeText = getTextBefore(editor, position)
+        const lastSameTagPosition = beforeText.lastIndexOf(`<${tag.name.slice(1)}`)
+        if (lastSameTagPosition !== -1) {
+            const identifiedTag = findClosingTag(editor, 
+                identifyTag(editor, editor.document.positionAt(lastSameTagPosition + 1))
+            )
+            if (identifiedTag.closing.range.isEqual(tag.closing.range)) {
+                return identifiedTag
+            }
+            return findOpeningTagByPosition(identifiedTag.opening.start)
+        }
+        return null
+    }
+
+    return findOpeningTagByPosition(tag.closing.start)
+}
+
 function findCurrentTag(editor: vscode.TextEditor): Tag {
     const currentTag = identifyTag(editor, editor.selection.active)
 
-    if (!currentTag.name.startsWith('/')) {
+    if (currentTag && !currentTag.name.startsWith('/')) {
         return findClosingTag(editor, currentTag)
     }
 
-    return null // TODO: closing
+    return findOpeningTag(editor, {
+        ...currentTag,
+        closing: currentTag.opening
+    })
 }
 
 function decorateTag(
@@ -155,23 +178,19 @@ export function activate(context: vscode.ExtensionContext) {
 
         let editor = vscode.window.activeTextEditor
 
-
         const dispose = (decoration: vscode.TextEditorDecorationType) => {
             if (decoration) return decoration.dispose()
         }
+
         if (activeDecorations) {
             dispose(activeDecorations.left)
             dispose(activeDecorations.right)
             dispose(activeDecorations.highlight)
         }
-
         activeDecorations = decorateTag(
             editor,
             findCurrentTag(editor),
             config
         )
     })
-}
-
-export function deactivate() {
 }

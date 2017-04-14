@@ -10,3 +10,7 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 * Highlight multiline tags correctly
 * Options for customizing left-right sides of highlighting
 * Documentation updates
+
+### 0.3.0
+
+* Match opening tag from closing tag
