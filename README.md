@@ -94,3 +94,7 @@ __Example:__
 ### 0.4.0
 
 * Fixes bug: when using inline javascript comparison or arrow function, it would mistake the `< >` signs for actual opening tag.
+
+### 0.4.1
+
+* Fix for tag names containing non-word characters
