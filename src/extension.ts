@@ -34,7 +34,7 @@ function isOpeningTagSyntaxValid(tagString) : boolean {
 }
 
 function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag {
-    const regex = /<([/\a-z]+)(\ *([a-z]+=((\'[^\']*?\')|(\{[^\}]*?\})|(\"[^\"]*?\"))\ *)?)*?\/?>/g
+    const regex = /<([\/a-zA-Z]+)(\ *([a-zA-Z]+=((\'[^\']*?\')|(\{[^\}]*?\})|(\"[^\"]*?\"))\ *)?)*?\/?>/g
     let match = regex.exec(editor.document.getText())
     const positionOffset = editor.document.offsetAt(position)
     while(match) {
@@ -53,7 +53,6 @@ function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag 
             if (match[0].endsWith('/>')) {
                 tag.closing = tag.opening
             }
-
             return tag
         }
 
