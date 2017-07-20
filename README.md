@@ -8,7 +8,7 @@ This extension is intended to provide the missing functionality that should be b
 
 ## Features
 
-![demo](https://i.imgbox.com/iIMnrqFm.gif)
+![demo](https://i.imgbox.com/DUXLFvW7.gif)
 
 ## Extension Settings
 
@@ -73,7 +73,7 @@ __Example:__
 
 ## Known Issues
 
-* If > symbol is used inside of tag, but not as an actual ending of the tag (i.e. inline js compare) it is likely to be mistaken for the tag's ending
+* There are cases when there are errors shown in developer tools console.
 
 ## Release Notes
 
@@ -90,3 +90,7 @@ __Example:__
 ### 0.3.0
 
 * Match opening tag from closing tag
+
+### 0.4.0
+
+* Fixes bug: when using inline javascript comparison or arrow function, it would mistake the `< >` signs for actual opening tag.
