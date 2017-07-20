@@ -28,11 +28,6 @@ function getTextBefore(editor: vscode.TextEditor, pos: vscode.Position): string 
     return editor.document.getText().slice(0, editor.document.offsetAt(pos))
 }
 
-function isOpeningTagSyntaxValid(tagString) : boolean {
-    const regex = /<([a-z]+)(\ *([a-z]+=((\'[^\']*?\')|(\{[^\}]*?\})|(\"[^\"]*?\"))\ *)?)*?\/?>/
-    return regex.test(tagString)
-}
-
 function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag {
     const regex = /<([\/a-zA-Z]+)(\ *([a-zA-Z]+=((\'[^\']*?\')|(\{[^\}]*?\})|(\"[^\"]*?\"))\ *)?)*?\/?>/g
     let match = regex.exec(editor.document.getText())
