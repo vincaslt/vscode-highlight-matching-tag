@@ -28,44 +28,46 @@ function getTextBefore(editor: vscode.TextEditor, pos: vscode.Position): string 
     return editor.document.getText().slice(0, editor.document.offsetAt(pos))
 }
 
+function isOpeningTagSyntaxValid(tagString) : boolean {
+    const regex = /<([a-z]+)(\ *([a-z]+=((\'[^\']*?\')|(\{[^\}]*?\})|(\"[^\"]*?\"))\ *)?)*?\/?>/
+    return regex.test(tagString)
+}
+
 function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag {
+    const regex = /<([/\a-z]+)(\ *([a-z]+=((\'[^\']*?\')|(\{[^\}]*?\})|(\"[^\"]*?\"))\ *)?)*?\/?>/g
+    let match = regex.exec(editor.document.getText())
     const positionOffset = editor.document.offsetAt(position)
-    const textBefore = getTextBefore(editor, position)
+    while(match) {
+        if (match.index < positionOffset && positionOffset < match.index + match[0].length) {
+            const start = editor.document.positionAt(match.index)
+            const end = editor.document.positionAt(match.index + match[0].length)
+            const range = new vscode.Range(start, end)
+            const tag: Tag = {
+                name: getTagName(match[0]),
+                opening: {
+                    start,
+                    end,
+                    range
+                }
+            }
+            if (match[0].endsWith('/>')) {
+                tag.closing = tag.opening
+            }
 
-    const openingCharIndex = textBefore.lastIndexOf('<')
-    const isOverBefore = textBefore.lastIndexOf('>') > openingCharIndex
-    const endCharIndex = positionOffset +
-        getTextAfter(editor, position).indexOf('>', openingCharIndex - positionOffset) + 1
+            return tag
+        }
 
-    let startPos = null
-    let endPos = null
-    let range = null
-    if (!isOverBefore && openingCharIndex !== -1 && endCharIndex !== -1 && endCharIndex > positionOffset) {
-        startPos = editor.document.positionAt(openingCharIndex)
-        endPos = editor.document.positionAt(endCharIndex)
-        range = new vscode.Range(startPos, endPos)
+        match = regex.exec(editor.document.getText())
     }
 
-    const tagString: string = range ? editor.document.getText(range) : ''
-    const tagName = tagString.trim().split(/\s/)[0]
+    return null
+}
+
+function getTagName(tagString): string {
+    return tagString.trim().split(/\s/)[0]
         .replace('<', '')
         .replace('/>', '')
         .replace('>', '')
-
-    const identifiedTag: Tag = {
-        name: tagName,
-        opening: {
-            start: startPos,
-            end: endPos,
-            range
-        }
-    }
-
-    if (tagString.endsWith('/>')) {
-        identifiedTag.closing = identifiedTag.opening
-    }
-
-    return identifiedTag
 }
 
 function findClosingTag(editor: vscode.TextEditor, tag: Tag) {
@@ -114,7 +116,7 @@ function findOpeningTag(editor: vscode.TextEditor, tag: Tag): Tag {
             const identifiedTag = findClosingTag(editor, 
                 identifyTag(editor, editor.document.positionAt(lastSameTagPosition + 1))
             )
-            if (identifiedTag.closing.range.isEqual(tag.closing.range)) {
+            if (!identifiedTag || identifiedTag.closing.range.isEqual(tag.closing.range)) {
                 return identifiedTag
             }
             return findOpeningTagByPosition(identifiedTag.opening.start)
@@ -132,10 +134,12 @@ function findCurrentTag(editor: vscode.TextEditor): Tag {
         return findClosingTag(editor, currentTag)
     }
 
-    return findOpeningTag(editor, {
-        ...currentTag,
-        closing: currentTag.opening
-    })
+    return currentTag
+        ? findOpeningTag(editor, {
+            ...currentTag,
+            closing: currentTag.opening
+        })
+        : null
 }
 
 function decorateTag(
@@ -144,7 +148,7 @@ function decorateTag(
     config: vscode.WorkspaceConfiguration
 ): Decorations {
     const disabled = !config.get('highlightSelfClosing') && tag.closing === tag.opening
-    if (!disabled && tag.opening.range !== null && tag.closing.range !== null) {
+    if (tag && !disabled && tag.opening.range !== null && tag.closing.range !== null) {
         const leftDecoration: vscode.DecorationOptions[] = [
             { range: new vscode.Range(tag.opening.start, tag.opening.start.translate(0, 1)) },
             { range: new vscode.Range(tag.closing.start, tag.closing.start.translate(0, 1)) }
@@ -187,10 +191,13 @@ export function activate(context: vscode.ExtensionContext) {
             dispose(activeDecorations.right)
             dispose(activeDecorations.highlight)
         }
-        activeDecorations = decorateTag(
-            editor,
-            findCurrentTag(editor),
-            config
-        )
+        const currentTag = findCurrentTag(editor)
+        if (currentTag) {
+            activeDecorations = decorateTag(
+                editor,
+                currentTag,
+                config
+            )
+        }
     })
 }
