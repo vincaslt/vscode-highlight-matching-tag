@@ -29,7 +29,7 @@ function getTextBefore(editor: vscode.TextEditor, pos: vscode.Position): string 
 }
 
 function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag {
-    const regex = /<\S+(\ *([a-zA-Z]+=((\'[^\']*?\')|(\{[^\}]*?\})|(\"[^\"]*?\"))\ *)?)*?\/?>/g
+    const regex = /<\S+(\s*((\w|-)+(\s*|(=((\'[^\']*?\')|(\{[^\}]*?\})|(\"[^\"]*?\"))))\s*)?)*?\/?>/g
     let match = regex.exec(editor.document.getText())
     const positionOffset = editor.document.offsetAt(position)
     while(match) {

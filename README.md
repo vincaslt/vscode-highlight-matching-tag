@@ -98,3 +98,7 @@ __Example:__
 ### 0.4.1
 
 * Fix for tag names containing non-word characters
+
+### 0.4.2
+
+* Fix not highlighting when attribute has implied truthy value `<tag attr></tag>`
