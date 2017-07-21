@@ -102,3 +102,7 @@ __Example:__
 ### 0.4.2
 
 * Fix not highlighting when attribute has implied truthy value `<tag attr></tag>`
+
+### 0.4.3
+
+* Fix JSX rest spread syntax breaking matching
