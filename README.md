@@ -74,6 +74,7 @@ __Example:__
 ## Known Issues
 
 * There are cases when there are errors shown in developer tools console.
+* Matching in huge files full of tags might feel a little sluggish when highlighting the tags in the end of the file.
 
 ## Release Notes
 
@@ -106,3 +107,9 @@ __Example:__
 ### 0.4.3
 
 * Fix JSX rest spread syntax breaking matching
+
+### 0.4.4
+
+* Fix potential source of high CPU load
+* Fix matching of multiple tags in one line
+* Reduce lag in huge files
