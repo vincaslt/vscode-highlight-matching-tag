@@ -29,11 +29,12 @@ function getTextBefore(editor: vscode.TextEditor, pos: vscode.Position): string 
 }
 
 function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag {
-    const regex = /<\S+(\s*((\{.*?\})|((\w|-)+(\s*|(=((\'[^\']*?\')|(\{[^\}]*?\})|(\"[^\"]*?\")))))\s*)?)*?\/?>/g
-    let match = regex.exec(editor.document.getText())
+    const regex = /<\S+?(\s((\{.*?\})|((\w|-)+(\s?|(=((\'[^\']*?\')|(\{[^\}]*?\})|(\"[^\"]*?\")))))\s*)?)*?\/?>/g
+    const text = editor.document.getText()
+    let match = regex.exec(text)
     const positionOffset = editor.document.offsetAt(position)
-    while(match) {
-        if (match.index < positionOffset && positionOffset < match.index + match[0].length) {
+    while(match && match.index < positionOffset) {
+        if (positionOffset < match.index + match[0].length) {
             const start = editor.document.positionAt(match.index)
             const end = editor.document.positionAt(match.index + match[0].length)
             const range = new vscode.Range(start, end)
@@ -51,7 +52,7 @@ function identifyTag(editor: vscode.TextEditor, position: vscode.Position): Tag 
             return tag
         }
 
-        match = regex.exec(editor.document.getText())
+        match = regex.exec(text)
     }
 
     return null
