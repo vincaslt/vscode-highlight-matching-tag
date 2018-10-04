@@ -14,10 +14,7 @@ function decorateTag(
   tag: hmt.Match,
   config: vscode.WorkspaceConfiguration
 ): Decorations | undefined {
-  if (
-    !config.get('highlightSelfClosing') &&
-    tag.closing.start === tag.opening.start
-  ) {
+  if (!config.get('highlightSelfClosing') && tag.closing.start === tag.opening.start) {
     return undefined
   }
 

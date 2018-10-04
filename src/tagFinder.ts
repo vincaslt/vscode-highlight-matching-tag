@@ -6,13 +6,11 @@ const blockState = (closingChar: string): moo.Rules => {
     bracketOpen: { match: /\{/, push: 'brackets' },
     parenthesisOpen: { match: /\(/, push: 'parenthesis' },
     squareBracketsOpen: { match: /\[/, push: 'squareBrackets' },
-    string: {
-      match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*'))/
-    },
-    tagOpening: { match: /<(?!\/)[^>\s]*(?=[^]*>)/, push: 'inTag' },
+    string: { match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*'))/ },
+    tagOpening: { match: /<(?!\/)(?=>|\w)[^>\s]*(?=[^]*>)/, push: 'inTag' },
     tagClosing: /<\/\S*?>/,
     ignore: {
-      match: new RegExp(`(?:[^])+?(?=<(?:(?:\/\S*)|\S+)|${closingChar})`),
+      match: new RegExp(`(?:[^])+?(?=<(?:(?=\/|\w)\S*)|${closingChar})`),
       lineBreaks: true
     }
   }
@@ -21,13 +19,13 @@ const blockState = (closingChar: string): moo.Rules => {
 const lexer = moo.states({
   main: {
     // Try to match anything that looks like a tag
-    tagOpening: { match: /<(?!\/)[^>\s]*(?=[^]*>)/, push: 'inTag' },
+    tagOpening: { match: /<(?!\/)(?=>|\w)[^>\s]*(?=[^]*>)/, push: 'inTag' },
 
     // Closing tag
     tagClosing: /<\/\S*?>/,
 
     // Anything that doesn't look like a tag is ignored (maybe |$ but it's multiline mode...)
-    ignore: { match: /(?:[^])+?(?=<(?:(?:\/\S*)|\S+))/, lineBreaks: true },
+    ignore: { match: /(?:[^])+?(?=<(?:(?=\/|\w)\S*))/, lineBreaks: true },
 
     ignoreTheRest: { match: /[^]+/, lineBreaks: true }
   },
