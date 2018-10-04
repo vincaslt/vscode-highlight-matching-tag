@@ -5,7 +5,7 @@ const blockState = (closingChar: string): moo.Rules => {
     blockClose: { match: new RegExp(closingChar), pop: 1 },
     bracketOpen: { match: /\{/, push: 'brackets' },
     parenthesisOpen: { match: /\(/, push: 'parenthesis' },
-    sqareBracketsOpen: { match: /\[/, push: 'squareBrackets' },
+    squareBracketsOpen: { match: /\[/, push: 'squareBrackets' },
     string: {
       match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*'))/,
       pop: 1
@@ -53,7 +53,7 @@ const lexer = moo.states({
 
     bracketOpen: { match: /\{/, push: 'brackets' },
     parenthesisOpen: { match: /\(/, push: 'parenthesis' },
-    sqareBracketsOpen: { match: /\[/, push: 'squareBrackets' }
+    squareBracketsOpen: { match: /\[/, push: 'squareBrackets' }
   },
   attributeValue: {
     // String attribute value (single or double quotes) TODO: ` <- this
@@ -65,7 +65,7 @@ const lexer = moo.states({
     // BRACKETS
     bracketOpen: { match: /\{/, push: 'brackets' },
     parenthesisOpen: { match: /\(/, push: 'parenthesis' },
-    sqareBracketsOpen: { match: /\[/, push: 'squareBrackets' },
+    squareBracketsOpen: { match: /\[/, push: 'squareBrackets' },
 
     // Presumably number attribute value
     value: { match: /[^\s>]+/ },
@@ -82,13 +82,9 @@ interface StackEntry {
   offset: number
   value: string
   end?: number
-  matching?: boolean
 }
 
-export function findMatchingTag(
-  text: string,
-  position: number
-): hmt.Match | undefined {
+export function findMatchingTag(text: string, position: number): hmt.Match | undefined {
   const stack: StackEntry[] = []
   lexer.reset(text)
   let match = lexer.next()
@@ -99,14 +95,7 @@ export function findMatchingTag(
         value: match.value.slice(1)
       })
     } else if (match.type === 'closeTag') {
-      if (
-        position > stack[stack.length - 1].offset &&
-        position <= match.offset
-      ) {
-        // Cursor is in this tag, so next closing tag will be matching
-        stack[stack.length - 1].matching = true
-        stack[stack.length - 1].end = match.offset + 1
-      }
+      stack[stack.length - 1].end = match.offset + 1
     } else if (match.type === 'tagSelfClose') {
       const tag = stack.pop()
       if (tag && position > tag.offset && position < match.offset) {
@@ -127,18 +116,23 @@ export function findMatchingTag(
       match.value.slice(2, -1) === stack[stack.length - 1].value
     ) {
       const tag = stack.pop()
-      if (tag && tag.matching) {
-        // This closes a tag we were trying to match
-        return {
-          opening: {
-            name: tag.value,
-            start: tag.offset,
-            end: tag.end!
-          },
-          closing: {
-            name: tag.value,
-            start: match.offset,
-            end: match.offset + match.value.length
+      if (tag && tag.end) {
+        const matchFound =
+          (position > tag.offset && position < tag.end) ||
+          (position > match.offset && position < match.offset + match.value.length)
+
+        if (matchFound) {
+          return {
+            opening: {
+              name: tag.value,
+              start: tag.offset,
+              end: tag.end!
+            },
+            closing: {
+              name: tag.value,
+              start: match.offset,
+              end: match.offset + match.value.length
+            }
           }
         }
       }
@@ -149,9 +143,6 @@ export function findMatchingTag(
 
   return undefined
 }
-
-// TODO: backwards matching!
-// TODO: can pop more than one state, so can go back deeper in attribute value
 /*
   When any tag is matched, pair the closing and opening tags
   When looking for the matching tag, just find the pair that we need, this way easy backwards matching will be achieved
