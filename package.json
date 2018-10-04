@@ -1,77 +1,90 @@
 {
-    "name": "highlight-matching-tag",
-    "displayName": "highlight-matching-tag",
-    "description": "Highlights matching closing or opening tag",
-    "version": "0.4.4",
-    "publisher": "vincaslt",
-    "icon": "icon.png",
-    "repository": {
-        "url": "https://github.com/vincaslt/vscode-highlight-matching-tag"
-    },
-    "engines": {
-        "vscode": "^1.10.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "*"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "configuration": {
-            "type": "object",
-            "title": "Highlight matching tag configuration",
-            "properties": {
-                "highlight-matching-tag.enabled": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable or disable the highlighting."
-                },
-                "highlight-matching-tag.highlightSelfClosing": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Should self-closing tags be highlighted"
-                },
-                "highlight-matching-tag.style": {
-                    "type": "object",
-                    "default": null,
-                    "description": "Style to use for the whole tag"
-                },
-                "highlight-matching-tag.leftStyle": {
-                    "type": "object",
-                    "default": {
-                        "borderWidth": "0 0 0 1px",
-                        "borderStyle": "dotted",
-                        "borderColor": "white",
-                        "borderRadius": "5px"
-                    },
-                    "description": "Style to use for left side of tag"
-                },
-                "highlight-matching-tag.rightStyle": {
-                    "type": "object",
-                    "default": {
-                        "borderWidth": "0 1px 0 0",
-                        "borderStyle": "dotted",
-                        "borderColor": "white",
-                        "borderRadius": "5px"
-                    },
-                    "description": "Style to use for right side of tag"
-                }
-            }
+  "name": "highlight-matching-tag",
+  "displayName": "highlight-matching-tag",
+  "description": "Highlights matching closing or opening tag",
+  "version": "0.5.0",
+  "publisher": "vincaslt",
+  "icon": "icon.png",
+  "repository": {
+    "url": "https://github.com/vincaslt/vscode-highlight-matching-tag"
+  },
+  "engines": {
+    "vscode": "^1.10.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Highlight matching tag configuration",
+      "properties": {
+        "highlight-matching-tag.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable the highlighting."
+        },
+        "highlight-matching-tag.highlightSelfClosing": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should self-closing tags be highlighted"
+        },
+        "highlight-matching-tag.style": {
+          "type": "object",
+          "default": null,
+          "description": "Style to use for the whole tag"
+        },
+        "highlight-matching-tag.leftStyle": {
+          "type": "object",
+          "default": {
+            "borderWidth": "0 0 0 1px",
+            "borderStyle": "dotted",
+            "borderColor": "white",
+            "borderRadius": "5px"
+          },
+          "description": "Style to use for left side of tag"
+        },
+        "highlight-matching-tag.rightStyle": {
+          "type": "object",
+          "default": {
+            "borderWidth": "0 1px 0 0",
+            "borderStyle": "dotted",
+            "borderColor": "white",
+            "borderRadius": "5px"
+          },
+          "description": "Style to use for right side of tag"
         }
-    },
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
+      }
     }
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.32",
+    "@types/moo": "^0.4.1",
+    "@types/node": "^6.0.40",
+    "mocha": "^2.3.3",
+    "prettier": "^1.14.3",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "tslint-plugin-prettier": "^2.0.0",
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "printWidth": 100
+  },
+  "dependencies": {
+    "moo": "^0.4.3"
+  }
 }
