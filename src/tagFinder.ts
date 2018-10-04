@@ -40,7 +40,7 @@ const lexer = moo.states({
     attribute: /[^\s{"'[(=>]+/,
 
     // Equals not in a block -> start attribute value
-    equals: { match: /=/, push: 'attributeValue' },
+    equals: { match: /=\s*/, push: 'attributeValue' },
 
     // New line, effect is the same as whitespace
     newLine: { match: /\n/, lineBreaks: true },
@@ -95,7 +95,7 @@ export function findMatchingTag(text: string, position: number): hmt.Match | und
       stack[stack.length - 1].end = match.offset + 1
     } else if (match.type === 'tagSelfClose') {
       const tag = stack.pop()
-      if (tag && position > tag.offset && position < match.offset) {
+      if (tag && position > tag.offset && position < match.offset + 2) {
         // Cursor is in this tag and it's self closing
         const opening = {
           name: tag.value,
