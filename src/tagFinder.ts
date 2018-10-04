@@ -7,13 +7,12 @@ const blockState = (closingChar: string): moo.Rules => {
     parenthesisOpen: { match: /\(/, push: 'parenthesis' },
     squareBracketsOpen: { match: /\[/, push: 'squareBrackets' },
     string: {
-      match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*'))/,
-      pop: 1
+      match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*'))/
     },
     tagOpening: { match: /<(?!\/)[^>\s]*(?=[^]*>)/, push: 'inTag' },
-    tagClosing: /<\/\S*>/,
+    tagClosing: /<\/\S*?>/,
     ignore: {
-      match: new RegExp(`(?:[^])+?(?=(?:<\S+|${closingChar}))`),
+      match: new RegExp(`(?:[^])+?(?=<(?:(?:\/\S*)|\S+)|${closingChar})`),
       lineBreaks: true
     }
   }
@@ -25,10 +24,10 @@ const lexer = moo.states({
     tagOpening: { match: /<(?!\/)[^>\s]*(?=[^]*>)/, push: 'inTag' },
 
     // Closing tag
-    tagClosing: /<\/\S*>/,
+    tagClosing: /<\/\S*?>/,
 
     // Anything that doesn't look like a tag is ignored (maybe |$ but it's multiline mode...)
-    ignore: { match: /(?:[^])+?(?=(?:<\S+))/, lineBreaks: true },
+    ignore: { match: /(?:[^])+?(?=<(?:(?:\/\S*)|\S+))/, lineBreaks: true },
 
     ignoreTheRest: { match: /[^]+/, lineBreaks: true }
   },
@@ -143,6 +142,7 @@ export function findMatchingTag(text: string, position: number): hmt.Match | und
 
   return undefined
 }
+// TODO: separate stacks for each block, otherwise it would get matched with the outside
 /*
   When any tag is matched, pair the closing and opening tags
   When looking for the matching tag, just find the pair that we need, this way easy backwards matching will be achieved
