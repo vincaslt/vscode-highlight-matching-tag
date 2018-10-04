@@ -6,6 +6,16 @@ Repo: https://github.com/vincaslt/vscode-highlight-matching-tag
 
 This extension is intended to provide the missing functionality that should be built-in out of the box in VSCode - to highlight matching opening or closing tags.
 
+Even though VSCode has implemented some basic matching recently, it's just that - basic. The built-in functionality is to match only from tag name and only for some file extensions. This extension will try to match from anywhere: tag attributes, from inside strings, any file.
+
+> With great power, comes great responsibility (-Albert Einstein 🤦)
+
+So I'm minimising it by supporting only what I work with:
+- Basic HTML
+- JSX
+
+Other flavors (vue, php, angular) should work, but there are no guarantees. Feel free to report the issues on them still.
+
 ## Features
 
 ![demo](https://i.imgbox.com/DUXLFvW7.gif)
@@ -113,3 +123,8 @@ __Example:__
 * Fix potential source of high CPU load
 * Fix matching of multiple tags in one line
 * Reduce lag in huge files
+
+### 0.5.0
+
+* Complete rewrite of the algorithm
+* Fixed reported matching and perf issues
