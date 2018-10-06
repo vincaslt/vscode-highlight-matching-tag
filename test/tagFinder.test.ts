@@ -266,5 +266,34 @@ suite('TagMatcher Tests', () => {
       assert.deepEqual(findMatchingTag(data, 14), expected)
       assert.deepEqual(findMatchingTag(data, 15), expected)
     })
+
+    test('unopened tag', () => {
+      const data = '<a><b></c></b></a>'
+      const expectedA = {
+        opening: { name: 'a', start: 0, end: 3 },
+        closing: { name: 'a', start: 14, end: 18 }
+      }
+      assert.deepEqual(findMatchingTag(data, 1), expectedA)
+      assert.deepEqual(findMatchingTag(data, 15), expectedA)
+
+      const expectedB = {
+        opening: { name: 'b', start: 3, end: 6 },
+        closing: { name: 'b', start: 10, end: 14 }
+      }
+      assert.deepEqual(findMatchingTag(data, 5), expectedB)
+      assert.deepEqual(findMatchingTag(data, 12), expectedB)
+      assert.deepEqual(findMatchingTag(data, 8), undefined)
+    })
+
+    test('unclosed tag', () => {
+      const data = '<div><input type="button"></div>'
+      const expected = {
+        opening: { name: 'div', start: 0, end: 5 },
+        closing: { name: 'div', start: 28, end: 34 }
+      }
+      assert.deepEqual(findMatchingTag(data, 4), expected)
+      assert.deepEqual(findMatchingTag(data, 31), expected)
+      assert.deepEqual(findMatchingTag(data, 10), undefined)
+    })
   })
 })
