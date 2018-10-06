@@ -43,7 +43,7 @@ const lexer = moo.states({
     equals: { match: /=\s*/, push: 'attributeValue' },
 
     // New line, effect is the same as whitespace
-    newLine: { match: /\n/, lineBreaks: true },
+    newLine: { match: /\r?\n/, lineBreaks: true },
 
     // Whitespace separates attributes mainly
     whiteSpace: /[ \t]+/,
@@ -141,6 +141,8 @@ export function findMatchingTag(text: string, position: number): hmt.Match | und
   return undefined
 }
 // TODO: separate stacks for each block, otherwise it would get matched with the outside
+// TODO: matching inside of strings
+// FIXME: <></>
 /*
   When any tag is matched, pair the closing and opening tags
   When looking for the matching tag, just find the pair that we need, this way easy backwards matching will be achieved

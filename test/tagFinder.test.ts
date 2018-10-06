@@ -184,6 +184,15 @@ suite('TagMatcher Tests', () => {
       }
       assert.deepEqual(findMatchingTag(data, 18), expected)
     })
+
+    test('simple tag with attributes', () => {
+      const data = '<div attribute attribute="value">content</div>'
+      const expected = {
+        opening: { name: 'div', start: 0, end: 33 },
+        closing: { name: 'div', start: 40, end: 46 }
+      }
+      assert.deepEqual(findMatchingTag(data, 18), expected)
+    })
   })
 
   suite('Advanced Test Cases', () => {
