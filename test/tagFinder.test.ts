@@ -213,5 +213,58 @@ suite('TagMatcher Tests', () => {
       assert.deepEqual(findMatchingTag(data, 18), expectedInside)
       assert.deepEqual(findMatchingTag(data, 31), expectedInside)
     })
+
+    test('tag deep in the attribute value', () => {
+      const data = `
+        <x a={f(
+          <s cmp={
+            <>content<a></a></>
+          }>s content</s>
+        )}>x content</x>`
+
+      const expectedX = {
+        opening: { name: 'x', start: 9, end: 106 },
+        closing: { name: 'x', start: 115, end: 119 }
+      }
+      assert.deepEqual(findMatchingTag(data, 10), expectedX)
+      assert.deepEqual(findMatchingTag(data, 17), expectedX)
+      assert.deepEqual(findMatchingTag(data, 86), expectedX)
+      assert.deepEqual(findMatchingTag(data, 105), expectedX)
+      assert.deepEqual(findMatchingTag(data, 117), expectedX)
+
+      const expectedS = {
+        opening: { name: 's', start: 28, end: 81 },
+        closing: { name: 's', start: 90, end: 94 }
+      }
+      assert.deepEqual(findMatchingTag(data, 30), expectedS)
+      assert.deepEqual(findMatchingTag(data, 54), expectedS)
+      assert.deepEqual(findMatchingTag(data, 61), expectedS)
+      assert.deepEqual(findMatchingTag(data, 92), expectedS)
+
+      const expectedFragment = {
+        opening: { name: '', start: 49, end: 51 },
+        closing: { name: '', start: 65, end: 68 }
+      }
+      assert.deepEqual(findMatchingTag(data, 50), expectedFragment)
+      assert.deepEqual(findMatchingTag(data, 67), expectedFragment)
+
+      const expectedA = {
+        opening: { name: 'a', start: 58, end: 61 },
+        closing: { name: 'a', start: 61, end: 65 }
+      }
+      assert.deepEqual(findMatchingTag(data, 59), expectedA)
+      assert.deepEqual(findMatchingTag(data, 62), expectedA)
+    })
+
+    test('React fragments', () => {
+      const data = 'text<>content</>text'
+      const expected = {
+        opening: { name: '', start: 4, end: 6 },
+        closing: { name: '', start: 13, end: 16 }
+      }
+      assert.deepEqual(findMatchingTag(data, 5), expected)
+      assert.deepEqual(findMatchingTag(data, 14), expected)
+      assert.deepEqual(findMatchingTag(data, 15), expected)
+    })
   })
 })

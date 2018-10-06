@@ -2,15 +2,16 @@ import * as moo from 'moo'
 
 const blockState = (closingChar: string): moo.Rules => {
   return {
-    blockClose: { match: new RegExp(closingChar), pop: 1 },
+    blockClose: { match: new RegExp(`\\${closingChar}`), pop: 1 },
     bracketOpen: { match: /\{/, push: 'brackets' },
     parenthesisOpen: { match: /\(/, push: 'parenthesis' },
     squareBracketsOpen: { match: /\[/, push: 'squareBrackets' },
     string: { match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*'))/ },
-    tagOpening: { match: /<(?!\/)(?=>|\w)[^>\s]*(?=[^]*>)/, push: 'inTag' },
+    tagOpening: { match: /<(?!\/)(?=>|\w)[^>\s\}\)\]\'\"]*(?=[^]*>)(?=\s|>)/, push: 'inTag' },
     tagClosing: /<\/\S*?>/,
     ignore: {
-      match: new RegExp(`(?:[^])+?(?=<(?:(?=\/|\w)\S*)|${closingChar})`),
+      // Ignore everything like main, plus block and string symbols
+      match: new RegExp(`(?:[^])+?(?=<(?:(?=\/|\\w|>)\S*)|\\${closingChar}|\\{|\\[|\\(|\\'|\\")`),
       lineBreaks: true
     }
   }
@@ -19,13 +20,13 @@ const blockState = (closingChar: string): moo.Rules => {
 const lexer = moo.states({
   main: {
     // Try to match anything that looks like a tag
-    tagOpening: { match: /<(?!\/)(?=>|\w)[^>\s]*(?=[^]*>)/, push: 'inTag' },
+    tagOpening: { match: /<(?!\/)(?=>|\w)[^>\s\}\)\]\'\"]*(?=[^]*>)(?=\s|>)/, push: 'inTag' },
 
     // Closing tag
     tagClosing: /<\/\S*?>/,
 
-    // Anything that doesn't look like a tag is ignored (maybe |$ but it's multiline mode...)
-    ignore: { match: /(?:[^])+?(?=<(?:(?=\/|\w)\S*))/, lineBreaks: true },
+    // Anything that doesn't look like a tag is ignored
+    ignore: { match: /(?:[^])+?(?=<(?:(?=\/|\w|>)\S*))/, lineBreaks: true },
 
     ignoreTheRest: { match: /[^]+/, lineBreaks: true }
   },
@@ -70,9 +71,9 @@ const lexer = moo.states({
     // Pop the state, there is no value after this point
     tagValueOver: { match: /(?=[\s>])/, lineBreaks: true, pop: 1 }
   },
-  brackets: blockState('\\}'),
-  parenthesis: blockState('\\)'),
-  squareBrackets: blockState('\\]')
+  brackets: blockState('}'),
+  parenthesis: blockState(')'),
+  squareBrackets: blockState(']')
 })
 
 interface StackEntry {
@@ -140,10 +141,10 @@ export function findMatchingTag(text: string, position: number): hmt.Match | und
 
   return undefined
 }
-// TODO: separate stacks for each block, otherwise it would get matched with the outside
+// TODO: separate stacks for each block, otherwise it could get matched with the outside
 // TODO: matching inside of strings
-// FIXME: <></>
 /*
   When any tag is matched, pair the closing and opening tags
-  When looking for the matching tag, just find the pair that we need, this way easy backwards matching will be achieved
+  When looking for the matching tag, just find the pair that we need,
+  this way easy backwards matching will be achieved
 */
