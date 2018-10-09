@@ -318,7 +318,7 @@ suite('TagMatcher Tests', () => {
       }
       assert.deepEqual(findMatchingTag(data, 4), expected)
       assert.deepEqual(findMatchingTag(data, 13), expected)
-      assert.deepEqual(findMatchingTag(data, 19), expected)
+      assert.deepEqual(findMatchingTag(data, 21), expected)
     })
 
     test('unopened same tag outside as attribute', () => {
