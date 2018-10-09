@@ -76,75 +76,113 @@ const lexer = moo.states({
   squareBrackets: blockState(']')
 })
 
-interface StackEntry {
-  offset: number
-  value: string
-  end?: number
-}
+export function parseTags(text: string): hmt.PartialMatch[] {
+  // Here will the tags will be put as they are resolved
+  const workingList: hmt.PartialMatch[] = []
 
-export function findMatchingTag(text: string, position: number): hmt.Match | undefined {
-  const stack: StackEntry[] = []
+  // Looks for last unclosed opening tag, e.g. <div attr=""
+  const closeLastOpening = (endPosition: number) => {
+    for (let i = workingList.length - 1; i >= 0; i--) {
+      const openingTag = workingList[i].opening
+      if (openingTag && !openingTag.end) {
+        openingTag.end = endPosition
+        return openingTag
+      }
+    }
+    return undefined
+  }
+
+  /*
+    Looks for the last "name" tag pair without a matching closing tag;
+    Closes any unclosed tags in between with null;
+    Closes the matching tag;
+  */
+  const closeMatchingOpeningTag = (closingTag: hmt.Tag, nestingLevel: number) => {
+    for (let i = workingList.length - 1; i >= 0; i--) {
+      const openingTag = workingList[i].opening
+      if (
+        workingList[i].attributeNestingLevel === nestingLevel &&
+        openingTag &&
+        openingTag.end &&
+        !workingList[i].closing
+      ) {
+        if (openingTag.name === closingTag.name) {
+          workingList[i].closing = closingTag
+          return
+        }
+        workingList[i].closing = null
+      }
+    }
+    return undefined
+  }
+
+  let attributeNestingLevel = 0 // Every block inside of attribute has higher level
+
   lexer.reset(text)
   let match = lexer.next()
   while (match !== undefined) {
-    if (match.type === 'tagOpening') {
-      stack.push({
-        offset: match.offset,
-        value: match.value.slice(1)
-      })
-    } else if (match.type === 'closeTag') {
-      stack[stack.length - 1].end = match.offset + 1
-    } else if (match.type === 'tagSelfClose') {
-      const tag = stack.pop()
-      if (tag && position > tag.offset && position < match.offset + 2) {
-        // Cursor is in this tag and it's self closing
-        const opening = {
-          name: tag.value,
-          start: tag.offset,
-          end: match.offset + 2
-        }
-        return {
-          opening,
-          closing: opening
-        }
-      }
-    } else if (
-      match.type === 'tagClosing' &&
-      stack[stack.length - 1] &&
-      match.value.slice(2, -1) === stack[stack.length - 1].value
-    ) {
-      const tag = stack.pop()
-      if (tag && tag.end) {
-        const matchFound =
-          (position > tag.offset && position < tag.end) ||
-          (position > match.offset && position < match.offset + match.value.length)
-
-        if (matchFound) {
-          return {
-            opening: {
-              name: tag.value,
-              start: tag.offset,
-              end: tag.end!
-            },
-            closing: {
-              name: tag.value,
-              start: match.offset,
-              end: match.offset + match.value.length
-            }
-          }
-        }
-      }
+    switch (match.type) {
+      case 'tagOpening':
+        workingList.push({
+          attributeNestingLevel,
+          opening: { name: match.value.slice(1), start: match.offset }
+        })
+        attributeNestingLevel += 1
+        break
+      case 'closeTag':
+        closeLastOpening(match.offset + 1)
+        attributeNestingLevel -= 1
+        break
+      case 'tagSelfClose':
+        const lastOpening = closeLastOpening(match.offset + 2)
+        attributeNestingLevel -= 1
+        closeMatchingOpeningTag(lastOpening as hmt.Tag, attributeNestingLevel)
+        break
+      case 'tagClosing':
+        closeMatchingOpeningTag(
+          {
+            name: match.value.slice(2, -1),
+            start: match.offset,
+            end: match.offset + match.value.length
+          },
+          attributeNestingLevel
+        )
+        break
     }
 
     match = lexer.next()
   }
 
-  return undefined
+  return workingList
 }
-// TODO: separate stacks for each block, otherwise it could get matched with the outside
+
+// Essentially checks if tag is {hmt.Match}
+function isTagPairValid(pair: hmt.PartialMatch): boolean {
+  return (
+    !!pair.closing &&
+    !!pair.opening &&
+    pair.opening.end !== undefined &&
+    pair.opening.start !== undefined
+  )
+}
+
+export function findMatchingTag(text: string, position: number): hmt.Match | undefined {
+  const tagPairs = parseTags(text)
+  const match = tagPairs
+    .reverse()
+    .find(
+      pair =>
+        isTagPairValid(pair) &&
+        ((position > pair.opening!.start! && position < pair.opening!.end!) ||
+          (position > pair.closing!.start! && position < pair.closing!.end!))
+    )
+
+  return (
+    match && {
+      opening: match.opening as hmt.Tag,
+      closing: match.closing as hmt.Tag
+    }
+  )
+}
+
 // TODO: matching inside of strings
-/*
-  When any tag is matched, pair the closing and opening tags
-  When looking for the matching tag, just find the pair that we need,
-  this way easy backwards matching will be achieved
-*/

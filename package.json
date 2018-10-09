@@ -2,7 +2,7 @@
   "name": "highlight-matching-tag",
   "displayName": "Highlight Matching Tag",
   "description": "Highlights matching closing or opening tag",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "publisher": "vincaslt",
   "icon": "icon.png",
   "repository": {
@@ -38,6 +38,16 @@
           "default": null,
           "description": "Style to use for the whole tag"
         },
+        "highlight-matching-tag.beginningStyle": {
+          "type": "object",
+          "default": null,
+          "description": "Style to use for the opening tag"
+        },
+        "highlight-matching-tag.endingStyle": {
+          "type": "object",
+          "default": null,
+          "description": "Style to use for the closing tag"
+        },
         "highlight-matching-tag.leftStyle": {
           "type": "object",
           "default": {
@@ -70,7 +80,7 @@
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "@types/moo": "^0.4.1",
-    "@types/node": "^10.11.4",
+    "@types/node": "^10.11.5",
     "mocha": "^5.2.0",
     "prettier": "^1.14.3",
     "tslint": "^5.11.0",

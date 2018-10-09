@@ -1,6 +1,7 @@
 import * as assert from 'assert'
 import { findMatchingTag } from '../src/tagFinder'
 
+// TODO: rewrite tests to test what is resolved by parseTags and separate test for findMatchingTag
 suite('TagMatcher Tests', () => {
   suite('Reported Test Cases', () => {
     test('vue-js special syntax', () => {
@@ -198,6 +199,7 @@ suite('TagMatcher Tests', () => {
   suite('Advanced Test Cases', () => {
     test('tag as an attribute value', () => {
       const data = '<div attribute={<span>content</span>}>content</div>'
+
       const expectedOutside = {
         opening: { name: 'div', start: 0, end: 38 },
         closing: { name: 'div', start: 45, end: 51 }
@@ -265,6 +267,70 @@ suite('TagMatcher Tests', () => {
       assert.deepEqual(findMatchingTag(data, 5), expected)
       assert.deepEqual(findMatchingTag(data, 14), expected)
       assert.deepEqual(findMatchingTag(data, 15), expected)
+    })
+
+    test('unopened tag', () => {
+      const data = '<a><b></c></b></a>'
+      const expectedA = {
+        opening: { name: 'a', start: 0, end: 3 },
+        closing: { name: 'a', start: 14, end: 18 }
+      }
+      assert.deepEqual(findMatchingTag(data, 1), expectedA)
+      assert.deepEqual(findMatchingTag(data, 15), expectedA)
+
+      const expectedB = {
+        opening: { name: 'b', start: 3, end: 6 },
+        closing: { name: 'b', start: 10, end: 14 }
+      }
+      assert.deepEqual(findMatchingTag(data, 5), expectedB)
+      assert.deepEqual(findMatchingTag(data, 12), expectedB)
+      assert.deepEqual(findMatchingTag(data, 8), undefined)
+    })
+
+    test('unclosed tag', () => {
+      const data = '<div><input type="button"></div>'
+      const expected = {
+        opening: { name: 'div', start: 0, end: 5 },
+        closing: { name: 'div', start: 26, end: 32 }
+      }
+      assert.deepEqual(findMatchingTag(data, 4), expected)
+      assert.deepEqual(findMatchingTag(data, 31), expected)
+      assert.deepEqual(findMatchingTag(data, 10), undefined)
+    })
+
+    test('unclosed tag inside attribute', () => {
+      const data = '<div attr={<input type="button">}></div>'
+      const expected = {
+        opening: { name: 'div', start: 0, end: 34 },
+        closing: { name: 'div', start: 34, end: 40 }
+      }
+      assert.deepEqual(findMatchingTag(data, 4), expected)
+      assert.deepEqual(findMatchingTag(data, 19), expected)
+      assert.deepEqual(findMatchingTag(data, 19), expected)
+      assert.deepEqual(findMatchingTag(data, 36), expected)
+    })
+
+    test('unopened same tag inside attribute', () => {
+      const data = '<div attr={</div>}></div>'
+      const expected = {
+        opening: { name: 'div', start: 0, end: 19 },
+        closing: { name: 'div', start: 19, end: 25 }
+      }
+      assert.deepEqual(findMatchingTag(data, 4), expected)
+      assert.deepEqual(findMatchingTag(data, 13), expected)
+      assert.deepEqual(findMatchingTag(data, 21), expected)
+    })
+
+    test('unopened same tag outside as attribute', () => {
+      const data = '<div><a attr={</div>}></div>'
+      const expected = {
+        opening: { name: 'div', start: 0, end: 5 },
+        closing: { name: 'div', start: 22, end: 28 }
+      }
+      assert.deepEqual(findMatchingTag(data, 4), expected)
+      assert.deepEqual(findMatchingTag(data, 24), expected)
+      assert.deepEqual(findMatchingTag(data, 7), undefined)
+      assert.deepEqual(findMatchingTag(data, 16), undefined)
     })
   })
 })
