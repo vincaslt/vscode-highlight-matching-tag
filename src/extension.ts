@@ -6,6 +6,8 @@ import { findMatchingTag } from './tagFinder'
 interface Decorations {
   left: vscode.TextEditorDecorationType
   right: vscode.TextEditorDecorationType
+  beginning: vscode.TextEditorDecorationType
+  ending: vscode.TextEditorDecorationType
   highlight: vscode.TextEditorDecorationType
 }
 
@@ -39,12 +41,24 @@ function decorateTag(
       range: new vscode.Range(closingEnd, closingEnd.translate(0, -1))
     }
   ]
+  const beginningDecoration: vscode.DecorationOptions[] = [
+    { range: new vscode.Range(openingStart, openingEnd) }
+  ]
+  const endingDecoration: vscode.DecorationOptions[] = [
+    { range: new vscode.Range(closingStart, closingEnd) }
+  ]
   const highlightDecoration: vscode.DecorationOptions[] = [
     { range: new vscode.Range(openingStart, openingEnd) },
     { range: new vscode.Range(closingStart, closingEnd) }
   ]
   const highlightDecorationType = vscode.window.createTextEditorDecorationType(
     config.get('style') || {}
+  )
+  const endingDecorationType = vscode.window.createTextEditorDecorationType(
+    config.get('endingStyle') || {}
+  )
+  const beginningDecorationType = vscode.window.createTextEditorDecorationType(
+    config.get('beginningStyle') || {}
   )
   const leftDecorationType = vscode.window.createTextEditorDecorationType(
     config.get('leftStyle') || {}
@@ -54,10 +68,14 @@ function decorateTag(
   )
   editor.setDecorations(leftDecorationType, leftDecoration)
   editor.setDecorations(rightDecorationType, rightDecoration)
+  editor.setDecorations(beginningDecorationType, beginningDecoration)
+  editor.setDecorations(endingDecorationType, endingDecoration)
   editor.setDecorations(highlightDecorationType, highlightDecoration)
   return {
     left: leftDecorationType,
     right: rightDecorationType,
+    beginning: beginningDecorationType,
+    ending: endingDecorationType,
     highlight: highlightDecorationType
   }
 }
@@ -86,6 +104,8 @@ export function activate() {
     if (activeDecorations) {
       dispose(activeDecorations.left)
       dispose(activeDecorations.right)
+      dispose(activeDecorations.beginning)
+      dispose(activeDecorations.ending)
       dispose(activeDecorations.highlight)
     }
 
