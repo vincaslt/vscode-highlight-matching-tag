@@ -46,3 +46,8 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 
 * Better matching inside tag attributes
 * Fixed crash when file has CRLF line endings
+
+### 0.6.0
+
+* Rewrite of tag finding algorithm, which fixes several bugs.
+* Additional styling options thanks to @beysim
