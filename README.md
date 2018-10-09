@@ -80,3 +80,5 @@ __Example:__
     "textDecoration": "underline"
 }
 ```
+
+* `highlight-matching-tag.beginningStyle` and/or `highlight-matching-tag.endingStyle` - Alternatively to the above rule, style only the opening or closing tags (or both with different styles).
