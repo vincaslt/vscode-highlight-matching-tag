@@ -51,3 +51,7 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 
 * Rewrite of tag finding algorithm, which fixes several bugs.
 * Additional styling options thanks to @beysim
+
+### 0.6.1
+
+* Small improvements for matching in code with unopened tags

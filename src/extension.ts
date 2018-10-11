@@ -1,7 +1,7 @@
 'use strict'
 
 import * as vscode from 'vscode'
-import { findMatchingTag } from './tagFinder'
+import { findMatchingTag } from './tagMatcher'
 
 interface Decorations {
   left: vscode.TextEditorDecorationType
