@@ -3,6 +3,18 @@ import { parseTags } from '../src/tagParser'
 
 suite('TagParser Tests', () => {
   suite('Reported Test Cases', () => {
+    test('function call as an attribute value', () => {
+      const data = `<cfset someFileHash = hash(someFile, "SHA-512")>content</cfset>`
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'cfset', start: 0, end: 48 },
+          closing: { name: 'cfset', start: 55, end: 63 }
+        }
+      ]
+      assert.deepEqual(parseTags(data), expected)
+    })
+
     test('vue-js special syntax', () => {
       const data = '<element-tag @attr="f(x)" :special=special></element-tag>'
       const expected: hmt.PartialMatch[] = [
@@ -383,6 +395,18 @@ suite('TagParser Tests', () => {
         {
           attributeNestingLevel: 1,
           closing: { name: 'div', start: 14, end: 20 }
+        }
+      ]
+      assert.deepEqual(parseTags(data), expected)
+    })
+
+    test('string as an attribute', () => {
+      const data = '<div "string">content</div>'
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'div', start: 0, end: 14 },
+          closing: { name: 'div', start: 21, end: 27 }
         }
       ]
       assert.deepEqual(parseTags(data), expected)

@@ -55,3 +55,8 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 ### 0.6.1
 
 * Small improvements for matching in code with unopened tags
+
+### 0.6.2
+
+* Fixes occasional breaking when attributes are not in blocks
+* Fixes breaking when string would be used as an attribute

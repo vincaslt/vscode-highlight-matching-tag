@@ -14,7 +14,7 @@ const blockState = (closingChar: string): moo.Rules => {
     tagClosing: /<\/\S*?>/,
     ignore: {
       // Ignore everything like main, plus block and string symbols
-      match: new RegExp(`(?:[^])+?(?=<(?:(?=\/|\\w|>)\S*)|\\${closingChar}|\\{|\\[|\\(|\\'|\\")`),
+      match: new RegExp(`(?:[^])+?(?=<(?:(?=\\/|\\w|>)\S*)|\\${closingChar}|\\{|\\[|\\(|\\'|\\")`),
       lineBreaks: true
     }
   }
@@ -43,6 +43,8 @@ export default moo.states({
     // Attribute name
     attribute: /[^\s{"'[(=>]+/,
 
+    string: { match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*'))/ },
+
     // Equals not in a block -> start attribute value
     equals: { match: /=\s*/, push: 'attributeValue' },
 
@@ -68,8 +70,8 @@ export default moo.states({
     parenthesisOpen: { match: /\(/, push: 'parenthesis' },
     squareBracketsOpen: { match: /\[/, push: 'squareBrackets' },
 
-    // Presumably number attribute value
-    value: { match: /[^\s>]+/ },
+    // Presumably number or function call attribute value
+    value: { match: /[^\s>\{\[\(\'\")]+/ },
 
     // Pop the state, there is no value after this point
     tagValueOver: { match: /(?=[\s>])/, lineBreaks: true, pop: 1 }
