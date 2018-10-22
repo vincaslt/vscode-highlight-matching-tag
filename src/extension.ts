@@ -1,7 +1,8 @@
 'use strict'
 
 import * as vscode from 'vscode'
-import { findMatchingTag } from './tagMatcher'
+import { findMatchingTag, getBreadcrumbs } from './tagMatcher'
+import { parseTags } from './tagParser'
 
 interface Decorations {
   left: vscode.TextEditorDecorationType
@@ -80,6 +81,8 @@ function decorateTag(
   }
 }
 
+const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100)
+
 export function activate() {
   let activeDecorations: Decorations | undefined
   const config = vscode.workspace.getConfiguration('highlight-matching-tag')
@@ -109,13 +112,23 @@ export function activate() {
       dispose(activeDecorations.highlight)
     }
 
-    const match = findMatchingTag(
-      editor.document.getText(),
-      editor.document.offsetAt(editor.selection.active)
-    )
+    const tagsList = parseTags(editor.document.getText())
+    const position = editor.document.offsetAt(editor.selection.active)
 
+    // Highlight matching tag
+    const match = findMatchingTag(tagsList, position)
     if (match) {
       activeDecorations = decorateTag(editor, match, config)
+    }
+
+    // Breadcrumbs
+    const tagsForPosition = getBreadcrumbs(tagsList, position)
+    const breadcrumb = tagsForPosition.map(pair => pair.opening!.name!).join(' > ')
+    status.text = 'Tag: ' + breadcrumb
+    if (breadcrumb) {
+      status.show()
+    } else {
+      status.hide()
     }
   })
 }
