@@ -1,4 +1,4 @@
-# highlight-matching-tag
+# VSCode Highlight Matching Tag
 
 ![logo](https://i.imgbox.com/eZAMmnap.png)
 
