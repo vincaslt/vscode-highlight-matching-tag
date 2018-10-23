@@ -36,7 +36,7 @@ __Example:__
 "highlight-matching-tag.enabled": true
 ```
 
-* `highlight-matching-tag.showPath` - (boolean: default true). Enables/disables showing path to tag in status bar (i.e. div > p > a)
+* `highlight-matching-tag.showPath` - (boolean: default true). Enables/disables showing path to tag in status bar (i.e. `div > p > a`)
 
 __Example:__
 
