@@ -1,10 +1,10 @@
-# highlight-matching-tag
+# VSCode Highlight Matching Tag
 
 ![logo](https://i.imgbox.com/eZAMmnap.png)
 
 Repo: https://github.com/vincaslt/vscode-highlight-matching-tag
 
-This extension is intended to provide the missing functionality that should be built-in out of the box in VSCode - to highlight matching opening or closing tags.
+This extension is intended to provide the missing functionality that should be built-in out of the box in VSCode - to highlight matching opening or closing tags. Optionally it also shows path to tag in the status bar.
 
 Even though VSCode has implemented some basic matching recently, it's just that - basic. The built-in functionality is to match only from tag name and only for some file extensions. This extension will try to match from anywhere: tag attributes, from inside strings, any file.
 
@@ -20,6 +20,8 @@ Other flavors (vue, php, angular) should work, but there are no guarantees. Feel
 
 ![demo](https://i.imgbox.com/DUXLFvW7.gif)
 
+![breadcrumbs](https://images2.imgbox.com/bc/0d/PzVAkYdU_o.png)
+
 ## Extension Settings
 
 Add any non-default setting to your workspace or user settings, to enable it. Add the default setting with different value to override.
@@ -32,6 +34,14 @@ __Example:__
 
 ```
 "highlight-matching-tag.enabled": true
+```
+
+* `highlight-matching-tag.showPath` - (boolean: default true). Enables/disables showing path to tag in status bar (i.e. div > p > a)
+
+__Example:__
+
+```
+"highlight-matching-tag.showPath": true
 ```
 
 * `highlight-matching-tag.leftStyle` - (TextEditorDecorationType: default see example). Style to use for left side of the matched tag (useful if you want borders on the sides). Proide falsy value to disable: `null` or `false`.

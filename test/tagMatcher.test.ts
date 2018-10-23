@@ -1,9 +1,10 @@
 import * as assert from 'assert'
 import { findMatchingTag } from '../src/tagMatcher'
+import { parseTags } from '../src/tagParser'
 
 suite('TagMatcher Tests', () => {
   test('can match from opening and closing tag', () => {
-    const data = '<a>a</a>'
+    const data = parseTags('<a>a</a>')
     const expected: hmt.Match = {
       opening: { name: 'a', start: 0, end: 3 },
       closing: { name: 'a', start: 4, end: 8 }
@@ -20,7 +21,7 @@ suite('TagMatcher Tests', () => {
   })
 
   test('can match nested with invalid tags', () => {
-    const data = '<a><b></c></b>'
+    const data = parseTags('<a><b></c></b>')
     const expected: hmt.Match = {
       opening: { name: 'b', start: 3, end: 6 },
       closing: { name: 'b', start: 10, end: 14 }
@@ -33,7 +34,7 @@ suite('TagMatcher Tests', () => {
   })
 
   test('does not match unclosed tags', () => {
-    const data = '<a>a'
+    const data = parseTags('<a>a')
     assert.deepEqual(findMatchingTag(data, 0), undefined)
     assert.deepEqual(findMatchingTag(data, 1), undefined)
     assert.deepEqual(findMatchingTag(data, 2), undefined)
@@ -42,7 +43,7 @@ suite('TagMatcher Tests', () => {
   })
 
   test('does not match unfinished opening tags', () => {
-    const data = '<a</a>'
+    const data = parseTags('<a</a>')
     assert.deepEqual(findMatchingTag(data, 0), undefined)
     assert.deepEqual(findMatchingTag(data, 1), undefined)
     assert.deepEqual(findMatchingTag(data, 2), undefined)

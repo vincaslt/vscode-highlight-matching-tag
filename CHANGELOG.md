@@ -60,3 +60,9 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 
 * Fixes occasional breaking when attributes are not in blocks
 * Fixes breaking when string would be used as an attribute
+
+### 0.7.0
+
+* Show path to tag in the status bar:
+
+![breadcrumbs](https://images2.imgbox.com/bc/0d/PzVAkYdU_o.png)
