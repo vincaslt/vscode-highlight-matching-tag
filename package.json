@@ -2,7 +2,7 @@
   "name": "highlight-matching-tag",
   "displayName": "Highlight Matching Tag",
   "description": "Highlights matching closing or opening tag",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "publisher": "vincaslt",
   "icon": "icon.png",
   "repository": {
@@ -27,6 +27,11 @@
           "type": "boolean",
           "default": true,
           "description": "Enable or disable the highlighting."
+        },
+        "highlight-matching-tag.showPath": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable of disable showing of tag's path in status bar"
         },
         "highlight-matching-tag.highlightSelfClosing": {
           "type": "boolean",

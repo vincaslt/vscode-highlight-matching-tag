@@ -29,7 +29,7 @@ export function findMatchingTag(
   )
 }
 
-export function getBreadcrumbs(tagsList: hmt.PartialMatch[], position: number) {
+export function getTagsForPosition(tagsList: hmt.PartialMatch[], position: number) {
   return tagsList.filter(
     pair => isTagPairValid(pair) && position > pair.opening!.start! && position < pair.closing!.end!
   )

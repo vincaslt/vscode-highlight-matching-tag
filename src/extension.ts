@@ -1,7 +1,7 @@
 'use strict'
 
 import * as vscode from 'vscode'
-import { findMatchingTag, getBreadcrumbs } from './tagMatcher'
+import { findMatchingTag, getTagsForPosition } from './tagMatcher'
 import { parseTags } from './tagParser'
 
 interface Decorations {
@@ -81,35 +81,46 @@ function decorateTag(
   }
 }
 
-const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100)
+function updateTagStatusBarItem(
+  status: vscode.StatusBarItem,
+  tagsList: hmt.PartialMatch[],
+  position: number
+) {
+  const tagsForPosition = getTagsForPosition(tagsList, position)
+
+  status.text = tagsForPosition.reduce((str, pair, i, pairs) => {
+    const name = pair.opening!.name!
+
+    if (i === 0) {
+      return `${name}`
+    }
+
+    const separator =
+      pairs[i - 1].attributeNestingLevel < pair.attributeNestingLevel ? ` ~ ` : ' › '
+
+    return str + separator + name
+  }, '')
+
+  if (tagsForPosition.length) {
+    status.show()
+  } else {
+    status.hide()
+  }
+}
 
 export function activate() {
   let activeDecorations: Decorations | undefined
   const config = vscode.workspace.getConfiguration('highlight-matching-tag')
+  const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100)
+
+  status.tooltip = 'Path to tag'
+  status.command = 'extension.selectedLines'
 
   vscode.window.onDidChangeTextEditorSelection(() => {
-    if (!config.get('enabled')) {
-      return
-    }
-
     const editor = vscode.window.activeTextEditor
 
-    if (!editor) {
+    if (!config.get('enabled') || !editor) {
       return
-    }
-
-    const dispose = (decoration: vscode.TextEditorDecorationType) => {
-      if (decoration) {
-        return decoration.dispose()
-      }
-    }
-
-    if (activeDecorations) {
-      dispose(activeDecorations.left)
-      dispose(activeDecorations.right)
-      dispose(activeDecorations.beginning)
-      dispose(activeDecorations.ending)
-      dispose(activeDecorations.highlight)
     }
 
     const tagsList = parseTags(editor.document.getText())
@@ -117,18 +128,22 @@ export function activate() {
 
     // Highlight matching tag
     const match = findMatchingTag(tagsList, position)
-    if (match) {
-      activeDecorations = decorateTag(editor, match, config)
+
+    // Tag breadcrumbs
+    if (config.get('showPath')) {
+      updateTagStatusBarItem(status, tagsList, position)
     }
 
-    // Breadcrumbs
-    const tagsForPosition = getBreadcrumbs(tagsList, position)
-    const breadcrumb = tagsForPosition.map(pair => pair.opening!.name!).join(' > ')
-    status.text = 'Tag: ' + breadcrumb
-    if (breadcrumb) {
-      status.show()
-    } else {
-      status.hide()
+    if (activeDecorations) {
+      activeDecorations.left.dispose()
+      activeDecorations.right.dispose()
+      activeDecorations.beginning.dispose()
+      activeDecorations.ending.dispose()
+      activeDecorations.highlight.dispose()
+    }
+
+    if (match) {
+      activeDecorations = decorateTag(editor, match, config)
     }
   })
 }
