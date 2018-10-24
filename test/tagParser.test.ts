@@ -3,6 +3,64 @@ import { parseTags } from '../src/tagParser'
 
 suite('TagParser Tests', () => {
   suite('Reported Test Cases', () => {
+    test('OPTIONAL: inverse matching', () => {
+      const data = `
+        <?
+        $.each(data, function(i, v) {
+          lista += '<tr><td class="text-center">' + v.idconfig +
+              '</td><td>' + v.titulo + '</td><td class="text-center">' +
+              <input class="form-check-input" type="checkbox" disabled ' + (v.ativo == 1 ? 'checked' : '')  +
+              '></td><td class="text-center">' +
+              '<button class="btedit btn btn-link btn-sm" data-id="' + v.idconfig + '">' +
+              '<i class="fas fa-edit"></i></button></td></tr>'
+        });
+        $('#tableconfigs tbody').html(lista);
+      `.trim()
+
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'tr', start: 61, end: 65 },
+          closing: { name: 'tr', start: 485, end: 490 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'td', start: 65, end: 89 },
+          closing: { name: 'td', start: 121, end: 126 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'td', start: 126, end: 130 },
+          closing: { name: 'td', start: 146, end: 151 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'td', start: 151, end: 175 },
+          closing: { name: 'td', start: 305, end: 310 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'input', start: 193, end: 305 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'td', start: 310, end: 334 },
+          closing: { name: 'td', start: 480, end: 485 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'button', start: 353, end: 425 },
+          closing: { name: 'button', start: 471, end: 480 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'i', start: 444, end: 467 },
+          closing: { name: 'i', start: 467, end: 471 }
+        }
+      ]
+      assert.deepEqual(parseTags(data), expected)
+    })
+
     test('function call as an attribute value', () => {
       const data = `<cfset someFileHash = hash(someFile, "SHA-512")>content</cfset>`
       const expected: hmt.PartialMatch[] = [

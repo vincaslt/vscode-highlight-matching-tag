@@ -66,3 +66,8 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 * Show path to tag in the status bar:
 
 ![breadcrumbs](https://images2.imgbox.com/bc/0d/PzVAkYdU_o.png)
+
+### 0.7.1
+
+* Minor improvements to tag in status bar
+* Experimental: inverse matching

@@ -43,7 +43,13 @@ export default moo.states({
     // Attribute name
     attribute: /[^\s{"'[(=>]+/,
 
-    string: { match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*'))/ },
+    // FIXME: this is a hack though
+    // Usually can't happen, probably the tag was inside of string
+    // enabling multiline on this, because string meaning is inverted
+    stringAttribute: {
+      match: /(?:(?:"(?:\\["\\]|[^"\\])*")|(?:'(?:\\['\\]|[^'\\])*'))/,
+      lineBreaks: true
+    },
 
     // Equals not in a block -> start attribute value
     equals: { match: /=\s*/, push: 'attributeValue' },
