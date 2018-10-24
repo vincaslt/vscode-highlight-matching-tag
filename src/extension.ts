@@ -4,6 +4,31 @@ import * as vscode from 'vscode'
 import { findMatchingTag, getTagsForPosition } from './tagMatcher'
 import { parseTags } from './tagParser'
 
+/*
+
+TODO: Rewrite decorations:
+
+Scope:
+- Whole tags
+- Only tag name
+
+Types:
+- Underline
+- Highlight
+- Surround
+  -- Sides
+  -- Full
+
+TODO: Gutter indicators
+
+Indicators for opening/closing tag range on the side
+
+TODO: Shortcuts
+- Jump to matching tag
+- Highlight path (all tags in path)
+TODO: Floating opening tag
+*/
+
 interface Decorations {
   left: vscode.TextEditorDecorationType
   right: vscode.TextEditorDecorationType
@@ -101,7 +126,9 @@ function updateTagStatusBarItem(
     return str + separator + name
   }, '')
 
-  if (tagsForPosition.length) {
+  status.text = status.text.trim().replace('›  ›', '»')
+
+  if (tagsForPosition.length > 1) {
     status.show()
   } else {
     status.hide()
@@ -114,7 +141,6 @@ export function activate() {
   const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100)
 
   status.tooltip = 'Path to tag'
-  status.command = 'extension.selectedLines'
 
   vscode.window.onDidChangeTextEditorSelection(() => {
     const editor = vscode.window.activeTextEditor
