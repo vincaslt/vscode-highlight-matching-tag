@@ -6,7 +6,6 @@ import { parseTags } from './tagParser'
 import TagStyler from './tagStyler'
 
 // TODO: take settings from config
-// TODO: FIXME: (fallback to underline when selecting)
 // TODO: yes/no modal to ask if the extension should keep old settings (migrate) or use new ones
 // TODO: some default style, by default use colors from skin for underline maybe
 // TODO: instructions on how to disable ruler styles or change them
@@ -67,8 +66,8 @@ export function activate() {
   const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100)
   const tagStyler = new TagStyler({
     opening: {
-      name: {
-        underline: 'yellow'
+      full: {
+        highlight: 'yellow'
       }
     }
   })

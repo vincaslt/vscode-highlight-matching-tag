@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import { debounce } from './utils'
 
 interface Decoration {
   highlight?: string
@@ -20,6 +21,15 @@ interface TagStylerConfig {
 }
 
 export default class TagStyler {
+  public decoratePair = debounce((pair: hmt.Match, editor: vscode.TextEditor) => {
+    this.clearDecorations()
+    this.decorateTag(pair.opening, this.config.opening, editor, true)
+
+    if (pair.opening.start !== pair.closing.start) {
+      this.decorateTag(pair.closing, this.config.closing || this.config.opening, editor, false)
+    }
+  }, 15)
+
   private config: TagStylerConfig
   private activeDecorations: vscode.TextEditorDecorationType[] = []
 
@@ -29,15 +39,6 @@ export default class TagStyler {
 
   public clearDecorations() {
     this.activeDecorations.forEach(decoration => decoration.dispose())
-  }
-
-  public decoratePair(pair: hmt.Match, editor: vscode.TextEditor) {
-    this.clearDecorations()
-    this.decorateTag(pair.opening, this.config.opening, editor, true)
-
-    if (pair.opening.start !== pair.closing.start) {
-      this.decorateTag(pair.closing, this.config.closing || this.config.opening, editor, false)
-    }
   }
 
   private decorateTag(
@@ -68,19 +69,41 @@ export default class TagStyler {
     }
   }
 
-  private applyDecoration(editor: vscode.TextEditor, decoration: Decoration, range: vscode.Range) {
-    const options: vscode.DecorationRenderOptions = {
-      overviewRulerColor:
-        decoration.highlight || decoration.surround || decoration.underline || 'yellow',
+  private applyDecoration(
+    editor: vscode.TextEditor,
+    decorationConfig: Decoration,
+    range: vscode.Range
+  ) {
+    const selectionRange = new vscode.Range(editor.selection.anchor, editor.selection.active)
+    const isSelected = !selectionRange.isEmpty && !!range.intersection(selectionRange)
+    let borderColor = decorationConfig.surround || decorationConfig.underline
+
+    let options: vscode.DecorationRenderOptions = {
       overviewRulerLane: vscode.OverviewRulerLane.Center,
-      backgroundColor: decoration.highlight,
-      borderWidth: decoration.surround ? '1px' : decoration.underline && '0 0 1px 0',
-      borderColor: decoration.surround ? decoration.surround : decoration.underline,
-      borderStyle: 'solid',
-      ...decoration.custom
+      overviewRulerColor:
+        decorationConfig.highlight ||
+        decorationConfig.surround ||
+        decorationConfig.underline ||
+        'yellow'
     }
+
+    // Removes decoration while selecting, and replaces it with underline
+    if (!isSelected) {
+      options.backgroundColor = decorationConfig.highlight
+    } else if (!borderColor) {
+      borderColor = decorationConfig.highlight
+    }
+
+    if (borderColor) {
+      options.borderStyle = 'solid'
+      options.borderColor = borderColor
+      options.borderWidth = decorationConfig.surround ? '1px' : '0 0 1px 0'
+    }
+
+    options = { ...options, ...decorationConfig.custom }
+
     const decorationType = vscode.window.createTextEditorDecorationType(options)
-    editor.setDecorations(decorationType, [range])
     this.activeDecorations.push(decorationType)
+    editor.setDecorations(decorationType, [range])
   }
 }
