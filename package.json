@@ -2,7 +2,7 @@
   "name": "highlight-matching-tag",
   "displayName": "Highlight Matching Tag",
   "description": "Highlights matching closing or opening tag",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "publisher": "vincaslt",
   "icon": "icon.png",
   "repository": {
@@ -37,41 +37,6 @@
           "type": "boolean",
           "default": false,
           "description": "Should self-closing tags be highlighted"
-        },
-        "highlight-matching-tag.style": {
-          "type": "object",
-          "default": null,
-          "description": "Style to use for the whole tag"
-        },
-        "highlight-matching-tag.beginningStyle": {
-          "type": "object",
-          "default": null,
-          "description": "Style to use for the opening tag"
-        },
-        "highlight-matching-tag.endingStyle": {
-          "type": "object",
-          "default": null,
-          "description": "Style to use for the closing tag"
-        },
-        "highlight-matching-tag.leftStyle": {
-          "type": "object",
-          "default": {
-            "borderWidth": "0 0 0 1px",
-            "borderStyle": "dotted",
-            "borderColor": "white",
-            "borderRadius": "5px"
-          },
-          "description": "Style to use for left side of tag"
-        },
-        "highlight-matching-tag.rightStyle": {
-          "type": "object",
-          "default": {
-            "borderWidth": "0 1px 0 0",
-            "borderStyle": "dotted",
-            "borderColor": "white",
-            "borderRadius": "5px"
-          },
-          "description": "Style to use for right side of tag"
         }
       }
     }

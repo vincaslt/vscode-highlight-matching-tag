@@ -6,8 +6,9 @@ import { parseTags } from './tagParser'
 import TagStyler from './tagStyler'
 
 // TODO: take settings from config
-// TODO: yes/no modal to ask if the extension should keep old settings (migrate) or use new ones
+// TODO: default underline color is theme's color
 // TODO: some default style, by default use colors from skin for underline maybe
+// TODO: yes/no modal to ask if the extension should keep old settings (migrate) or use new ones
 // TODO: instructions on how to disable ruler styles or change them
 
 /*
@@ -67,7 +68,7 @@ export function activate() {
   const tagStyler = new TagStyler({
     opening: {
       full: {
-        highlight: 'yellow'
+        highlight: 'red'
       }
     }
   })
@@ -87,7 +88,7 @@ export function activate() {
     // Highlight matching tag
     const match = findMatchingTag(tagsList, position)
 
-    if (match) {
+    if (match && (match.opening !== match.closing || config.get('highlightSelfClosing'))) {
       tagStyler.decoratePair(match, editor)
     } else {
       tagStyler.clearDecorations()
