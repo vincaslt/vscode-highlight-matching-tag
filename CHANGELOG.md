@@ -77,3 +77,4 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 * Complete styling overhaul
 * New configuration options for styles
 * Show highlighted pair in ruler section (sidebar)
+* Small performance and UX improvements
