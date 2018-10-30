@@ -7,7 +7,6 @@ import { parseTags } from './tagParser'
 import TagStyler from './tagStyler'
 
 // TODO: default style is underline with tag's color from theme
-// TODO: yes/no modal to ask if the extension should keep old settings (migrate) or use new ones
 // TODO: instructions on how to disable ruler styles or change them
 // TODO: disable default tag highlighting (active selections)
 
@@ -17,15 +16,6 @@ TODO: Shortcuts
   - Highlight path (all tags in path)
 
 TODO: Floating opening tag
-
-old setting names: 
-
-style
-endingStyle
-beginningStyle
-leftStyle
-rightStyle
-
 */
 
 function updateTagStatusBarItem(
