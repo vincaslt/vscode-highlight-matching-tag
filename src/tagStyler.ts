@@ -49,15 +49,21 @@ export default class TagStyler {
   ) {
     const start = editor.document.positionAt(tag.start)
     const end = editor.document.positionAt(tag.end)
+    const nameStart = start.translate(0, isOpening ? 1 : 2)
+    const nameEnd = nameStart.translate(0, tag.name.length)
+    const nameRange = new vscode.Range(nameStart, nameEnd)
 
-    if (decorations.full) {
-      this.applyDecoration(editor, decorations.full, new vscode.Range(start, end))
+    // Fallback to full if name doesn't exist, but styling does
+    if (decorations.full || (decorations.name && nameRange.isEmpty)) {
+      this.applyDecoration(
+        editor,
+        decorations.full || decorations.name!,
+        new vscode.Range(start, end)
+      )
     }
 
     if (decorations.name) {
-      const nameStart = start.translate(0, isOpening ? 1 : 2)
-      const nameEnd = nameStart.translate(0, tag.name.length)
-      this.applyDecoration(editor, decorations.name, new vscode.Range(nameStart, nameEnd))
+      this.applyDecoration(editor, decorations.name, nameRange)
     }
 
     if (decorations.left) {
