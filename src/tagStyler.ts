@@ -84,14 +84,16 @@ export default class TagStyler {
     const isSelected = !selectionRange.isEmpty && !!range.intersection(selectionRange)
     let borderColor = decorationConfig.surround || decorationConfig.underline
 
-    let options: vscode.DecorationRenderOptions = {
-      overviewRulerLane: vscode.OverviewRulerLane.Center,
-      overviewRulerColor:
-        decorationConfig.highlight ||
-        decorationConfig.surround ||
-        decorationConfig.underline ||
-        'yellow'
-    }
+    let options: vscode.DecorationRenderOptions = config.showRuler
+      ? {
+          overviewRulerLane: vscode.OverviewRulerLane.Center,
+          overviewRulerColor:
+            decorationConfig.highlight ||
+            decorationConfig.surround ||
+            decorationConfig.underline ||
+            'yellow'
+        }
+      : {}
 
     // Removes decoration while selecting, and replaces it with underline
     if (!isSelected) {

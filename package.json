@@ -26,12 +26,17 @@
         "highlight-matching-tag.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Enable or disable the highlighting."
+          "description": "Enable or disable the extension"
         },
         "highlight-matching-tag.showPath": {
           "type": "boolean",
           "default": true,
-          "description": "Enable of disable showing of tag's path in status bar"
+          "description": "Enable or disable showing tag's path in status bar"
+        },
+        "highlight-matching-tag.showRuler": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable showing highlighted tag pair in ruler section"
         },
         "highlight-matching-tag.highlightSelfClosing": {
           "type": "boolean",

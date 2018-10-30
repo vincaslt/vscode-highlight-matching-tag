@@ -19,7 +19,7 @@ Other flavors (vue, php, angular) should work, but there are no guarantees. Feel
 
 ## Features
 
-![demo](https://images2.imgbox.com/e1/9d/yDF2xfcZ_o.gif)
+![demo](https://images2.imgbox.com/71/2a/zIA1XCzK_o.gif)
 
 ![breadcrumbs](https://images2.imgbox.com/bc/0d/PzVAkYdU_o.png)
 
@@ -31,6 +31,7 @@ Add any non-default setting to your workspace or user settings, to enable it. Ad
 | --------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
 | `highlight-matching-tag.enabled`              | true                                             | Enables/disables the extension                                                              |
 | `highlight-matching-tag.showPath`             | true                                             | Enables/disables showing path to tag in status bar (e.g. `div > p > a`)                     |
+| `highlight-matching-tag.showRuler`               | true | "Enables/disables showing highlighted tag pair in ruler section                      |
 | `highlight-matching-tag.highlightSelfClosing` | false                                            | Should self-closing tags be highlighted too (can be useful for multiline self-closing tags) |
 | `highlight-matching-tag.styles`               | `{ opening: { name: { underline: 'yellow' } } }` | Custom styling configuration, see [Styling Options](#styling-options)                       |
 

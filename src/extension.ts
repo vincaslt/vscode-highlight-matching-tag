@@ -7,7 +7,6 @@ import { parseTags } from './tagParser'
 import TagStyler from './tagStyler'
 
 // TODO: default style is underline with tag's color from theme
-// TODO: instructions on how to disable ruler styles or change them
 // TODO: disable default tag highlighting (active selections)
 
 /*

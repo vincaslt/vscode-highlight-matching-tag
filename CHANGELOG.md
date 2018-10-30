@@ -71,3 +71,9 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 
 * Minor improvements to tag in status bar
 * Experimental: inverse matching
+
+### 0.8.0
+
+* Complete styling overhaul
+* New configuration options for styles
+* Show highlighted pair in ruler section (sidebar)

@@ -18,6 +18,10 @@ class Configuration {
     return !!this.config.get('showPath')
   }
 
+  get showRuler() {
+    return !!this.config.get('showRuler')
+  }
+
   get styles() {
     return this.config.get<TagStylerConfig>('styles')
   }
@@ -81,8 +85,6 @@ class Configuration {
     this.update('rightStyle', undefined)
     this.update('beginningStyle', undefined)
     this.update('endingStyle', undefined)
-
-    // TODO: info message
   }
 
   private update<T>(section: string, value: T) {
