@@ -1,110 +1,21 @@
 'use strict'
 
 import * as vscode from 'vscode'
+import config from './configuration'
 import { findMatchingTag, getTagsForPosition } from './tagMatcher'
 import { parseTags } from './tagParser'
+import TagStyler from './tagStyler'
+
+// TODO: default style is underline with tag's color from theme
+// TODO: disable default tag highlighting (active selections)
 
 /*
-
-TODO: Rewrite decorations:
-
-Scope:
-- Whole tags
-- Only tag name
-
-Types:
-- Underline
-- Highlight
-- Surround
-  -- Sides
-  -- Full
-
-TODO: Gutter indicators
-
-Indicators for opening/closing tag range on the side
-
 TODO: Shortcuts
-- Jump to matching tag
-- Highlight path (all tags in path)
+  - Jump to matching tag
+  - Highlight path (all tags in path)
+
 TODO: Floating opening tag
 */
-
-interface Decorations {
-  left: vscode.TextEditorDecorationType
-  right: vscode.TextEditorDecorationType
-  beginning: vscode.TextEditorDecorationType
-  ending: vscode.TextEditorDecorationType
-  highlight: vscode.TextEditorDecorationType
-}
-
-function decorateTag(
-  editor: vscode.TextEditor,
-  tag: hmt.Match,
-  config: vscode.WorkspaceConfiguration
-): Decorations | undefined {
-  if (!config.get('highlightSelfClosing') && tag.closing.start === tag.opening.start) {
-    return undefined
-  }
-
-  const openingStart = editor.document.positionAt(tag.opening.start)
-  const openingEnd = editor.document.positionAt(tag.opening.end)
-  const closingStart = editor.document.positionAt(tag.closing.start)
-  const closingEnd = editor.document.positionAt(tag.closing.end)
-
-  const leftDecoration: vscode.DecorationOptions[] = [
-    {
-      range: new vscode.Range(openingStart, openingStart.translate(0, 1))
-    },
-    {
-      range: new vscode.Range(closingStart, closingStart.translate(0, 1))
-    }
-  ]
-  const rightDecoration: vscode.DecorationOptions[] = [
-    {
-      range: new vscode.Range(openingEnd, openingEnd.translate(0, -1))
-    },
-    {
-      range: new vscode.Range(closingEnd, closingEnd.translate(0, -1))
-    }
-  ]
-  const beginningDecoration: vscode.DecorationOptions[] = [
-    { range: new vscode.Range(openingStart, openingEnd) }
-  ]
-  const endingDecoration: vscode.DecorationOptions[] = [
-    { range: new vscode.Range(closingStart, closingEnd) }
-  ]
-  const highlightDecoration: vscode.DecorationOptions[] = [
-    { range: new vscode.Range(openingStart, openingEnd) },
-    { range: new vscode.Range(closingStart, closingEnd) }
-  ]
-  const highlightDecorationType = vscode.window.createTextEditorDecorationType(
-    config.get('style') || {}
-  )
-  const endingDecorationType = vscode.window.createTextEditorDecorationType(
-    config.get('endingStyle') || {}
-  )
-  const beginningDecorationType = vscode.window.createTextEditorDecorationType(
-    config.get('beginningStyle') || {}
-  )
-  const leftDecorationType = vscode.window.createTextEditorDecorationType(
-    config.get('leftStyle') || {}
-  )
-  const rightDecorationType = vscode.window.createTextEditorDecorationType(
-    config.get('rightStyle') || {}
-  )
-  editor.setDecorations(leftDecorationType, leftDecoration)
-  editor.setDecorations(rightDecorationType, rightDecoration)
-  editor.setDecorations(beginningDecorationType, beginningDecoration)
-  editor.setDecorations(endingDecorationType, endingDecoration)
-  editor.setDecorations(highlightDecorationType, highlightDecoration)
-  return {
-    left: leftDecorationType,
-    right: rightDecorationType,
-    beginning: beginningDecorationType,
-    ending: endingDecorationType,
-    highlight: highlightDecorationType
-  }
-}
 
 function updateTagStatusBarItem(
   status: vscode.StatusBarItem,
@@ -135,17 +46,36 @@ function updateTagStatusBarItem(
   }
 }
 
-export function activate() {
-  let activeDecorations: Decorations | undefined
-  const config = vscode.workspace.getConfiguration('highlight-matching-tag')
-  const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100)
+export function activate(context: vscode.ExtensionContext) {
+  config.configure(context)
+
+  // Updates version for future migrations
+  const extension = vscode.extensions.getExtension('vincaslt.highlight-matching-tag')
+  const currentVersion: string | undefined = extension && extension.packageJSON.version
+
+  if (config.hasOldSettings) {
+    vscode.window
+      .showInformationMessage(
+        'Highlight Matching Tag has new default styles. Would you like to keep your existing styles or discard them and use new ones?',
+        'Keep',
+        'Discard'
+      )
+      .then((value: string) => {
+        config.migrate(value === 'Keep')
+      })
+  }
+
+  context.globalState.update('hmtVersion', currentVersion)
+
+  const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 120)
+  const tagStyler = new TagStyler()
 
   status.tooltip = 'Path to tag'
 
   vscode.window.onDidChangeTextEditorSelection(() => {
     const editor = vscode.window.activeTextEditor
 
-    if (!config.get('enabled') || !editor) {
+    if (!config.isEnabled || !editor) {
       return
     }
 
@@ -156,20 +86,14 @@ export function activate() {
     const match = findMatchingTag(tagsList, position)
 
     // Tag breadcrumbs
-    if (config.get('showPath')) {
+    if (config.showPath) {
       updateTagStatusBarItem(status, tagsList, position)
     }
 
-    if (activeDecorations) {
-      activeDecorations.left.dispose()
-      activeDecorations.right.dispose()
-      activeDecorations.beginning.dispose()
-      activeDecorations.ending.dispose()
-      activeDecorations.highlight.dispose()
-    }
-
-    if (match) {
-      activeDecorations = decorateTag(editor, match, config)
+    if (match && (match.opening !== match.closing || config.highlightSelfClosing)) {
+      tagStyler.decoratePair(match, editor)
+    } else {
+      tagStyler.clearDecorations()
     }
   })
 }
