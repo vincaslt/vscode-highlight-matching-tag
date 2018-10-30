@@ -5,18 +5,12 @@ import { findMatchingTag, getTagsForPosition } from './tagMatcher'
 import { parseTags } from './tagParser'
 import TagStyler from './tagStyler'
 
-// TODO: take settings from config
-// TODO: default underline color is theme's color
-// TODO: some default style, by default use colors from skin for underline maybe
+// TODO: default style is underline with tag's color from theme
 // TODO: yes/no modal to ask if the extension should keep old settings (migrate) or use new ones
 // TODO: instructions on how to disable ruler styles or change them
+// TODO: disable default tag highlighting (active selections)
 
 /*
-
-different styles for opening and closing
-disable default highlighting?
-use default tag color for underline highlighting
-
 TODO: Shortcuts
   - Jump to matching tag
   - Highlight path (all tags in path)
@@ -64,14 +58,12 @@ function updateTagStatusBarItem(
 
 export function activate() {
   const config = vscode.workspace.getConfiguration('highlight-matching-tag')
-  const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100)
-  const tagStyler = new TagStyler({
-    opening: {
-      name: {
-        underline: 'yellow'
-      }
+  const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 120)
+  const tagStyler = new TagStyler(
+    config.get('styles') || {
+      opening: { name: { underline: 'yellow' } }
     }
-  })
+  )
 
   status.tooltip = 'Path to tag'
 
@@ -88,15 +80,15 @@ export function activate() {
     // Highlight matching tag
     const match = findMatchingTag(tagsList, position)
 
+    // Tag breadcrumbs
+    if (config.get('showPath')) {
+      updateTagStatusBarItem(status, tagsList, position)
+    }
+
     if (match && (match.opening !== match.closing || config.get('highlightSelfClosing'))) {
       tagStyler.decoratePair(match, editor)
     } else {
       tagStyler.clearDecorations()
-    }
-
-    // Tag breadcrumbs
-    if (config.get('showPath')) {
-      updateTagStatusBarItem(status, tagsList, position)
     }
   })
 }

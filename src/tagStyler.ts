@@ -2,9 +2,9 @@ import * as vscode from 'vscode'
 import { debounce } from './utils'
 
 interface Decoration {
-  highlight?: string
-  underline?: string
-  surround?: string
+  highlight?: string | vscode.ThemeColor
+  underline?: string | vscode.ThemeColor
+  surround?: string | vscode.ThemeColor
   custom?: vscode.DecorationRenderOptions
 }
 
