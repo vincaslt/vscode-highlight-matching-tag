@@ -67,8 +67,8 @@ export function activate() {
   const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100)
   const tagStyler = new TagStyler({
     opening: {
-      full: {
-        highlight: 'red'
+      name: {
+        underline: 'yellow'
       }
     }
   })
