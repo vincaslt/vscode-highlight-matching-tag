@@ -42,6 +42,21 @@
           "type": "object",
           "default": null,
           "description": "Decorations for opening and closing tags"
+        },
+        "highlight-matching-tag.style": {
+          "description": "Removed in 0.8.0, use styles"
+        },
+        "highlight-matching-tag.leftStyle": {
+          "description": "Removed in 0.8.0, use styles"
+        },
+        "highlight-matching-tag.rightStyle": {
+          "description": "Removed in 0.8.0, use styles"
+        },
+        "highlight-matching-tag.endingStyle": {
+          "description": "Removed in 0.8.0, use styles"
+        },
+        "highlight-matching-tag.beginningStyle": {
+          "description": "Removed in 0.8.0, use styles"
         }
       }
     }

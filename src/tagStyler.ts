@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import config from './configuration'
 import { debounce } from './utils'
 
 interface Decoration {
@@ -15,12 +16,16 @@ interface TagDecorations {
   full?: Decoration
 }
 
-interface TagStylerConfig {
+export interface TagStylerConfig {
   opening: TagDecorations
   closing?: TagDecorations
 }
 
 export default class TagStyler {
+  private get config(): TagStylerConfig {
+    return config.styles || { opening: { name: { underline: 'yellow' } } }
+  }
+
   public decoratePair = debounce((pair: hmt.Match, editor: vscode.TextEditor) => {
     this.clearDecorations()
     this.decorateTag(pair.opening, this.config.opening, editor, true)
@@ -30,12 +35,7 @@ export default class TagStyler {
     }
   }, 15)
 
-  private config: TagStylerConfig
   private activeDecorations: vscode.TextEditorDecorationType[] = []
-
-  constructor(config: TagStylerConfig) {
-    this.config = config
-  }
 
   public clearDecorations() {
     this.activeDecorations.forEach(decoration => decoration.dispose())
