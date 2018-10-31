@@ -3,6 +3,18 @@ import { parseTags } from '../src/tagParser'
 
 suite('TagParser Tests', () => {
   suite('Reported Test Cases', () => {
+    test('escaped string in attribute', () => {
+      const data = `<div class=\\"myclass\\"></div>`
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'div', start: 0, end: 23 },
+          closing: { name: 'div', start: 23, end: 29 }
+        }
+      ]
+      assert.deepEqual(parseTags(data), expected)
+    })
+
     test('OPTIONAL: inverse matching', () => {
       const data = `
         <?

@@ -9,7 +9,9 @@ const blockState = (closingChar: string): moo.Rules => {
     bracketOpen: { match: /\{/, push: 'brackets' },
     parenthesisOpen: { match: /\(/, push: 'parenthesis' },
     squareBracketsOpen: { match: /\[/, push: 'squareBrackets' },
-    string: { match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*'))/ },
+    string: {
+      match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*')|(?:\\"(?:\\["\\]|[^\n"\\])*\\")|(?:\\'(?:\\['\\]|[^\n'\\])*\\'))/
+    },
     tagOpening: { match: /<(?!\/)(?=>|\w)[^>\s\}\)\]\'\"]*(?=[^]*>)(?=\s|>)/, push: 'inTag' },
     tagClosing: /<\/\S*?>/,
     ignore: {
@@ -47,7 +49,7 @@ export default moo.states({
     // Usually can't happen, probably the tag was inside of string
     // enabling multiline on this, because string meaning is inverted
     stringAttribute: {
-      match: /(?:(?:"(?:\\["\\]|[^"\\])*")|(?:'(?:\\['\\]|[^'\\])*'))/,
+      match: /(?:(?:"(?:\\["\\]|[^"\\])*")|(?:'(?:\\['\\]|[^'\\])*')|(?:\\"(?:\\["\\]|[^"\\])*\\")|(?:\\'(?:\\['\\]|[^'\\])*\\'))/,
       lineBreaks: true
     },
 
@@ -67,7 +69,7 @@ export default moo.states({
   attributeValue: {
     // String attribute value (single or double quotes)
     string: {
-      match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*'))/,
+      match: /(?:(?:"(?:\\["\\]|[^\n"\\])*")|(?:'(?:\\['\\]|[^\n'\\])*')|(?:\\"(?:\\["\\]|[^\n"\\])*\\")|(?:\\'(?:\\['\\]|[^\n'\\])*\\'))/,
       pop: 1
     },
 
