@@ -46,7 +46,20 @@
         "highlight-matching-tag.styles": {
           "type": "object",
           "default": null,
-          "description": "Decorations for opening and closing tags"
+          "description": "Decorations for opening and closing tags",
+          "properties": {
+            "opening": {
+              "type": "object",
+              "description": "Opening Tag Styles. Also applies to closing tags if closing styles not provided"
+            },
+            "closing": {
+              "type": "object",
+              "description": "Closing Tag Styles"
+            }
+          },
+          "required": [
+            "opening"
+          ]
         },
         "highlight-matching-tag.style": {
           "description": "Removed in 0.8.0, use styles"
@@ -64,7 +77,14 @@
           "description": "Removed in 0.8.0, use styles"
         }
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "highlight-matching-tag.jumpToMatchingTag",
+        "title": "Jump to matching tag",
+        "category": "Highlight Matching Tag"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "tsc -p ./",

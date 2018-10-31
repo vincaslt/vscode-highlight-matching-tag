@@ -11,7 +11,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
-    "strictNullChecks": true
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "alwaysStrict": true
   },
   "exclude": ["node_modules", ".vscode-test"]
 }
