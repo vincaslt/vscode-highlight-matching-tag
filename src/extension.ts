@@ -1,6 +1,7 @@
 'use strict'
 
 import * as vscode from 'vscode'
+import { jumpToMatchingTag } from './commands'
 import config from './configuration'
 import { findMatchingTag, getTagsForPosition } from './tagMatcher'
 import { parseTags } from './tagParser'
@@ -11,7 +12,6 @@ import TagStyler from './tagStyler'
 
 /*
 TODO: Shortcuts
-  - Jump to matching tag
   - Highlight path (all tags in path)
 
 TODO: Floating opening tag
@@ -72,28 +72,34 @@ export function activate(context: vscode.ExtensionContext) {
 
   status.tooltip = 'Path to tag'
 
-  vscode.window.onDidChangeTextEditorSelection(() => {
-    const editor = vscode.window.activeTextEditor
+  context.subscriptions.push(
+    vscode.window.onDidChangeTextEditorSelection(() => {
+      const editor = vscode.window.activeTextEditor
 
-    if (!config.isEnabled || !editor) {
-      return
-    }
+      if (!config.isEnabled || !editor) {
+        return
+      }
 
-    const tagsList = parseTags(editor.document.getText())
-    const position = editor.document.offsetAt(editor.selection.active)
+      const tagsList = parseTags(editor.document.getText())
+      const position = editor.document.offsetAt(editor.selection.active)
 
-    // Highlight matching tag
-    const match = findMatchingTag(tagsList, position)
+      // Highlight matching tag
+      const match = findMatchingTag(tagsList, position)
 
-    // Tag breadcrumbs
-    if (config.showPath) {
-      updateTagStatusBarItem(status, tagsList, position)
-    }
+      // Tag breadcrumbs
+      if (config.showPath) {
+        updateTagStatusBarItem(status, tagsList, position)
+      }
 
-    if (match && (match.opening !== match.closing || config.highlightSelfClosing)) {
-      tagStyler.decoratePair(match, editor)
-    } else {
-      tagStyler.clearDecorations()
-    }
-  })
+      if (match && (match.opening !== match.closing || config.highlightSelfClosing)) {
+        tagStyler.decoratePair(match, editor)
+      } else {
+        tagStyler.clearDecorations()
+      }
+    })
+  )
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('highlight-matching-tag.jumpToMatchingTag', jumpToMatchingTag)
+  )
 }
