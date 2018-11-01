@@ -15,7 +15,7 @@ export async function jumpToMatchingTag() {
 
   const match = findMatchingTag(tagsList, positionOffset)
 
-  if (match && match.opening !== match.closing) {
+  if (match) {
     const openingTagStartPos = editor.document.positionAt(match.opening.start)
     const openingTagRange = new vscode.Range(
       openingTagStartPos,

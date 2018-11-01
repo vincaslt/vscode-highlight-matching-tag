@@ -100,8 +100,6 @@ export function activate(context: vscode.ExtensionContext) {
   )
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('highlight-matching-tag.jumpToMatchingTag', async () => {
-      jumpToMatchingTag()
-    })
+    vscode.commands.registerCommand('highlight-matching-tag.jumpToMatchingTag', jumpToMatchingTag)
   )
 }
