@@ -78,3 +78,9 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 * New configuration options for styles
 * Show highlighted pair in ruler section (sidebar)
 * Small performance and UX improvements
+
+### 0.8.1
+
+* Fixes crashing on escaped quotes
+* Command to jump to matching tag by @KamasamaK
+* Settings schema improvements by @KamasamaK
