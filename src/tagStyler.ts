@@ -1,6 +1,5 @@
 import * as vscode from 'vscode'
 import config from './configuration'
-import { debounce } from './utils'
 
 interface Decoration {
   highlight?: string | vscode.ThemeColor
@@ -26,19 +25,20 @@ export default class TagStyler {
     return config.styles || { opening: { name: { underline: 'yellow' } } }
   }
 
-  public decoratePair = debounce((pair: hmt.Match, editor: vscode.TextEditor) => {
+  private activeDecorations: vscode.TextEditorDecorationType[] = []
+
+  public decoratePair = (pair: hmt.Match, editor: vscode.TextEditor) => {
     this.clearDecorations()
     this.decorateTag(pair.opening, this.config.opening, editor, true)
 
     if (pair.opening.start !== pair.closing.start) {
       this.decorateTag(pair.closing, this.config.closing || this.config.opening, editor, false)
     }
-  }, 15)
-
-  private activeDecorations: vscode.TextEditorDecorationType[] = []
+  }
 
   public clearDecorations() {
     this.activeDecorations.forEach(decoration => decoration.dispose())
+    this.activeDecorations = []
   }
 
   private decorateTag(

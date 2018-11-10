@@ -12,21 +12,20 @@ export function findMatchingTag(
   tagsList: hmt.PartialMatch[],
   position: number
 ): hmt.Match | undefined {
-  const match = [...tagsList]
-    .reverse()
-    .find(
-      pair =>
-        isTagPairValid(pair) &&
-        ((position > pair.opening!.start! && position < pair.opening!.end!) ||
-          (position > pair.closing!.start! && position < pair.closing!.end!))
-    )
-
-  return (
-    match && {
-      opening: match.opening as hmt.Tag,
-      closing: match.closing as hmt.Tag
+  for (let i = tagsList.length - 1; i >= 0; i--) {
+    if (
+      isTagPairValid(tagsList[i]) &&
+      ((position > tagsList[i].opening!.start! && position < tagsList[i].opening!.end!) ||
+        (position > tagsList[i].closing!.start! && position < tagsList[i].closing!.end!))
+    ) {
+      return {
+        opening: tagsList[i].opening as hmt.Tag,
+        closing: tagsList[i].closing as hmt.Tag
+      }
     }
-  )
+  }
+
+  return undefined
 }
 
 export function getTagsForPosition(tagsList: hmt.PartialMatch[], position: number) {

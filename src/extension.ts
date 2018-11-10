@@ -72,15 +72,23 @@ export function activate(context: vscode.ExtensionContext) {
 
   status.tooltip = 'Path to tag'
 
+  let editor: vscode.TextEditor | undefined
+  let tagsList: hmt.PartialMatch[] | undefined
+  let editorText: string | undefined
+
   context.subscriptions.push(
     vscode.window.onDidChangeTextEditorSelection(() => {
-      const editor = vscode.window.activeTextEditor
+      editor = vscode.window.activeTextEditor
 
       if (!config.isEnabled || !editor) {
         return
       }
 
-      const tagsList = parseTags(editor.document.getText())
+      if (!tagsList || editorText !== editor.document.getText()) {
+        editorText = editor.document.getText()
+        tagsList = parseTags(editorText)
+      }
+
       const position = editor.document.offsetAt(editor.selection.active)
 
       // Highlight matching tag
