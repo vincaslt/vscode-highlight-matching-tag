@@ -28,11 +28,11 @@ function updateTagStatusBarItem(
     const name = pair.opening!.name!
 
     if (i === 0) {
-      return `${name}`
+      return name
     }
 
     const separator =
-      pairs[i - 1].attributeNestingLevel < pair.attributeNestingLevel ? ` ~ ` : ' › '
+      pairs[i - 1].attributeNestingLevel < pair.attributeNestingLevel ? ' ~ ' : ' › '
 
     return str + separator + name
   }, '')
@@ -72,38 +72,33 @@ export function activate(context: vscode.ExtensionContext) {
 
   status.tooltip = 'Path to tag'
 
-  let editor: vscode.TextEditor | undefined
-  let tagsList: hmt.PartialMatch[] | undefined
-  let editorText: string | undefined
+  let editorText: string = ''
+  let tagsList: hmt.PartialMatch[] = []
 
   context.subscriptions.push(
-    vscode.window.onDidChangeTextEditorSelection(() => {
-      editor = vscode.window.activeTextEditor
+    vscode.window.onDidChangeTextEditorSelection(evt => {
+      const editor = evt.textEditor
 
-      if (!config.isEnabled || !editor) {
+      if (!config.isEnabled || !editor || editor !== vscode.window.activeTextEditor) {
         return
       }
 
-      if (!tagsList || editorText !== editor.document.getText()) {
+      if (editorText !== editor.document.getText()) {
         editorText = editor.document.getText()
         tagsList = parseTags(editorText)
       }
 
-      const position = editor.document.offsetAt(editor.selection.active)
-
-      // Highlight matching tag
-      const match = findMatchingTag(tagsList, position)
-
       // Tag breadcrumbs
       if (config.showPath) {
-        updateTagStatusBarItem(status, tagsList, position)
+        updateTagStatusBarItem(status, tagsList, editor.document.offsetAt(editor.selection.active))
       }
 
-      if (match && (match.opening !== match.closing || config.highlightSelfClosing)) {
-        tagStyler.decoratePair(match, editor)
-      } else {
-        tagStyler.clearDecorations()
-      }
+      // Highlight matching tags
+      tagStyler.clearDecorations()
+      editor.selections
+        .map(sel => findMatchingTag(tagsList, editor.document.offsetAt(sel.active)))
+        .filter(match => match && (match.opening !== match.closing || config.highlightSelfClosing))
+        .forEach(match => tagStyler.decoratePair(match as hmt.Match, editor))
     })
   )
 
