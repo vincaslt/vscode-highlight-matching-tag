@@ -3,8 +3,20 @@ import { parseTags } from '../src/tagParser'
 
 suite('TagParser Tests', () => {
   suite('Reported Test Cases', () => {
+    test('string attribute with escapes inside', () => {
+      const data =
+        '<cffile action="read" file="\\"#directory#\\"\\#fileName#" variable="localFile">'
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'cffile', start: 0, end: 77 }
+        }
+      ]
+      assert.deepEqual(parseTags(data), expected)
+    })
+
     test('escaped string in attribute', () => {
-      const data = `<div class=\\"myclass\\"></div>`
+      const data = '<div class=\\"myclass\\"></div>'
       const expected: hmt.PartialMatch[] = [
         {
           attributeNestingLevel: 0,
@@ -74,7 +86,7 @@ suite('TagParser Tests', () => {
     })
 
     test('function call as an attribute value', () => {
-      const data = `<cfset someFileHash = hash(someFile, "SHA-512")>content</cfset>`
+      const data = '<cfset someFileHash = hash(someFile, "SHA-512")>content</cfset>'
       const expected: hmt.PartialMatch[] = [
         {
           attributeNestingLevel: 0,

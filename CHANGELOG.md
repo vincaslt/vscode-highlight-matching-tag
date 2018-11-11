@@ -84,3 +84,7 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 * Fixes crashing on escaped quotes
 * Command to jump to matching tag by @KamasamaK
 * Settings schema improvements by @KamasamaK
+
+### 0.8.2
+
+* Fixes performance degradation over time
