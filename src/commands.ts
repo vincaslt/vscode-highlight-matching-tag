@@ -23,7 +23,7 @@ export async function jumpToMatchingTag() {
     )
 
     const newPosition = openingTagRange.contains(position)
-      ? editor.document.positionAt(match.closing.start).translate(0, 1)
+      ? editor.document.positionAt(match.closing.start + 1)
       : openingTagStartPos.translate(0, 1)
 
     editor.selection = new vscode.Selection(newPosition, newPosition)

@@ -28,7 +28,6 @@ export default class TagStyler {
   private activeDecorations: vscode.TextEditorDecorationType[] = []
 
   public decoratePair = (pair: hmt.Match, editor: vscode.TextEditor) => {
-    this.clearDecorations()
     this.decorateTag(pair.opening, this.config.opening, editor, true)
 
     if (pair.opening.start !== pair.closing.start) {
