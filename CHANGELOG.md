@@ -88,3 +88,8 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 ### 0.8.2
 
 * Fixes performance degradation over time
+
+### 0.8.3
+
+* Multi-cursor matching by @KamasamaK
+* Fix crashes in strings with escaped characters

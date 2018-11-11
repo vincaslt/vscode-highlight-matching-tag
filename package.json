@@ -2,7 +2,7 @@
   "name": "highlight-matching-tag",
   "displayName": "Highlight Matching Tag",
   "description": "Highlights matching closing or opening tag",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "publisher": "vincaslt",
   "icon": "icon.png",
   "repository": {
@@ -524,7 +524,8 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "node ./node_modules/vscode/bin/test"
+    "test": "node ./node_modules/vscode/bin/test",
+    "lint:fix": "tslint -c ./tslint.json -p ./tsconfig.json --format stylish --fix"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
