@@ -516,6 +516,11 @@
         "command": "highlight-matching-tag.jumpToMatchingTag",
         "title": "Jump to matching tag",
         "category": "Highlight Matching Tag"
+      },
+      {
+        "command": "highlight-matching-tag.selectPairContents",
+        "title": "Select contents of matching tag pair",
+        "category": "Highlight Matching Tag"
       }
     ]
   },

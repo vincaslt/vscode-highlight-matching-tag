@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { findMatchingTag } from './tagMatcher'
+import { findMatchingTag, getTagsForPosition } from './tagMatcher'
 import { parseTags } from './tagParser'
 
 export async function jumpToMatchingTag() {
@@ -28,6 +28,31 @@ export async function jumpToMatchingTag() {
 
     editor.selection = new vscode.Selection(newPosition, newPosition)
     editor.revealRange(editor.selection)
+  } else {
+    vscode.window.showInformationMessage('No matching tag was found')
+  }
+}
+
+export function selectPairContents() {
+  const editor = vscode.window.activeTextEditor
+
+  if (!editor) {
+    return
+  }
+
+  const tagsList = parseTags(editor.document.getText())
+  const position = editor.selection.active
+  const positionOffset = editor.document.offsetAt(position)
+
+  const activePair = getTagsForPosition(tagsList, positionOffset).slice(-1)[0]
+
+  if (activePair) {
+    const openingTagEndPos = editor.document.positionAt(activePair.opening.end)
+    const closingTagStartPos = editor.document.positionAt(activePair.closing.start)
+
+    const tagContentSelection = new vscode.Selection(openingTagEndPos, closingTagStartPos)
+    editor.selection = tagContentSelection
+    editor.revealRange(tagContentSelection)
   } else {
     vscode.window.showInformationMessage('No matching tag was found')
   }

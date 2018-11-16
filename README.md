@@ -156,3 +156,4 @@ Result light theme:
 Used in Command Palette (Win/Linux: `Ctrl`+`Shift`+`P`; Mac: `Cmd`+`Shift`+`P`) by searching for command name. Can also be bound to [Keyboard Shortcuts](https://code.visualstudio.com/docs/getstarted/keybindings).
 
 - Jump to matching tag
+- Select contents of matching tag pair

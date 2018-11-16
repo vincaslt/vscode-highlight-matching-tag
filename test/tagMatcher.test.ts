@@ -6,6 +6,7 @@ suite('TagMatcher Tests', () => {
   test('can match from opening and closing tag', () => {
     const data = parseTags('<a>a</a>')
     const expected: hmt.Match = {
+      attributeNestingLevel: 0,
       opening: { name: 'a', start: 0, end: 3 },
       closing: { name: 'a', start: 4, end: 8 }
     }
@@ -23,6 +24,7 @@ suite('TagMatcher Tests', () => {
   test('can match nested with invalid tags', () => {
     const data = parseTags('<a><b></c></b>')
     const expected: hmt.Match = {
+      attributeNestingLevel: 0,
       opening: { name: 'b', start: 3, end: 6 },
       closing: { name: 'b', start: 10, end: 14 }
     }

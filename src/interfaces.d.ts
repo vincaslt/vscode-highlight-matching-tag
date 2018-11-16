@@ -6,6 +6,7 @@ declare namespace hmt {
   }
 
   interface Match {
+    attributeNestingLevel: number
     opening: Tag
     closing: Tag
   }

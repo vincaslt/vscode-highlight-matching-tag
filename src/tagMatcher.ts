@@ -19,6 +19,7 @@ export function findMatchingTag(
         (position > tagsList[i].closing!.start! && position < tagsList[i].closing!.end!))
     ) {
       return {
+        attributeNestingLevel: tagsList[i].attributeNestingLevel,
         opening: tagsList[i].opening as hmt.Tag,
         closing: tagsList[i].closing as hmt.Tag
       }
@@ -31,5 +32,5 @@ export function findMatchingTag(
 export function getTagsForPosition(tagsList: hmt.PartialMatch[], position: number) {
   return tagsList.filter(
     pair => isTagPairValid(pair) && position > pair.opening!.start! && position < pair.closing!.end!
-  )
+  ) as hmt.Match[]
 }

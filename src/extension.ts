@@ -1,7 +1,5 @@
-'use strict'
-
 import * as vscode from 'vscode'
-import { jumpToMatchingTag } from './commands'
+import { jumpToMatchingTag, selectPairContents } from './commands'
 import config from './configuration'
 import { findMatchingTag, getTagsForPosition } from './tagMatcher'
 import { parseTags } from './tagParser'
@@ -104,5 +102,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand('highlight-matching-tag.jumpToMatchingTag', jumpToMatchingTag)
+  )
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('highlight-matching-tag.selectPairContents', selectPairContents)
   )
 }
