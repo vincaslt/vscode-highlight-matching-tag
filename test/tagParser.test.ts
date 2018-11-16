@@ -3,6 +3,23 @@ import { parseTags } from '../src/tagParser'
 
 suite('TagParser Tests', () => {
   suite('Reported Test Cases', () => {
+    test('OPTIONAL: multiline string attribute', () => {
+      const data = `
+        <cfset sql = "
+          SELECT	*
+          FROM	SomeTable
+        ">
+      `.trim()
+
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'cfset', start: 0, end: 69 }
+        }
+      ]
+      assert.deepEqual(parseTags(data), expected)
+    })
+
     test('string attribute with escapes inside', () => {
       const data =
         '<cffile action="read" file="\\"#directory#\\"\\#fileName#" variable="localFile">'

@@ -10,7 +10,7 @@ const blockState = (closingChar: string): moo.Rules => {
     parenthesisOpen: { match: /\(/, push: 'parenthesis' },
     squareBracketsOpen: { match: /\[/, push: 'squareBrackets' },
     string: {
-      match: /(?:(?:"(?:\\["\\]|[^\n"])*")|(?:'(?:\\['\\]|[^\n'])*')|(?:\\"(?:\\["\\]|[^\n"])*\\")|(?:\\'(?:\\['\\]|[^\n'])*\\'))/
+      match: /(?:(?:"(?:\\["\\]|[^"])*")|(?:'(?:\\['\\]|[^'])*')|(?:\\"(?:\\["\\]|[^"])*\\")|(?:\\'(?:\\['\\]|[^'])*\\'))/
     },
     tagOpening: { match: /<(?!\/)(?=>|\w)[^>\s\}\)\]\'\"]*(?=[^]*>)(?=\s|>)/, push: 'inTag' },
     tagClosing: /<\/\S*?>/,
@@ -69,7 +69,8 @@ export default moo.states({
   attributeValue: {
     // String attribute value (single or double quotes)
     string: {
-      match: /(?:(?:"(?:\\["\\]|[^\n"])*")|(?:'(?:\\['\\]|[^\n'])*')|(?:\\"(?:\\["\\]|[^\n"])*\\")|(?:\\'(?:\\['\\]|[^\n'])*\\'))/,
+      match: /(?:(?:"(?:\\["\\]|[^"])*")|(?:'(?:\\['\\]|[^'])*')|(?:\\"(?:\\["\\]|[^"])*\\")|(?:\\'(?:\\['\\]|[^'])*\\'))/,
+      lineBreaks: true,
       pop: 1
     },
 
