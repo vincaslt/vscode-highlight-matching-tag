@@ -93,3 +93,8 @@ All notable changes to the "higlight-matching-tag" extension will be documented 
 
 * Multi-cursor matching by @KamasamaK
 * Fix crashes in strings with escaped characters
+
+### 0.8.4
+
+* Enabled experimental parsing of multiline string attributes
+* Added command to select contents of matching tag pair
