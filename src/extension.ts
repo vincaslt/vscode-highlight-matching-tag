@@ -93,8 +93,24 @@ export function activate(context: vscode.ExtensionContext) {
 
       // Highlight matching tags
       tagStyler.clearDecorations()
-      editor.selections
-        .map(sel => findMatchingTag(tagsList, editor.document.offsetAt(sel.active)))
+
+      let matches = []
+      if (!config.highlightFromContent) {
+        matches = editor.selections.map(sel =>
+          findMatchingTag(tagsList, editor.document.offsetAt(sel.active))
+        )
+      } else {
+        matches = editor.selections.map(
+          sel =>
+            getTagsForPosition(tagsList, editor.document.offsetAt(sel.active))
+              .filter(
+                match => match && (match.opening !== match.closing || config.highlightSelfClosing)
+              )
+              .slice(-1)[0]
+        )
+      }
+
+      matches
         .filter(match => match && (match.opening !== match.closing || config.highlightSelfClosing))
         .forEach(match => tagStyler.decoratePair(match as hmt.Match, editor))
     })

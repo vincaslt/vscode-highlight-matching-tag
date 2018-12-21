@@ -48,6 +48,11 @@
           "default": false,
           "description": "Should self-closing tags be highlighted"
         },
+        "highlight-matching-tag.highlightFromContent": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to highlight from the tag content the closest matching tag pair"
+        },
         "highlight-matching-tag.styles": {
           "type": "object",
           "default": null,
@@ -537,12 +542,12 @@
     "@types/moo": "^0.4.2",
     "@types/node": "^10.12.10",
     "mocha": "^5.2.0",
-    "prettier": "^1.15.2",
-    "tslint": "^5.11.0",
+    "prettier": "^1.15.3",
+    "tslint": "^5.12.0",
     "tslint-config-prettier": "^1.17.0",
     "tslint-plugin-prettier": "^2.0.1",
-    "typescript": "^3.1.6",
-    "vscode": "^1.1.22"
+    "typescript": "^3.2.2",
+    "vscode": "^1.1.26"
   },
   "prettier": {
     "singleQuote": true,
