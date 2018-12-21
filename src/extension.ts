@@ -96,9 +96,11 @@ export function activate(context: vscode.ExtensionContext) {
 
       let matches = []
       if (!config.highlightFromContent) {
-        matches = editor.selections.map(sel =>
-          findMatchingTag(tagsList, editor.document.offsetAt(sel.active))
-        )
+        matches = editor.selections
+          .map(sel => findMatchingTag(tagsList, editor.document.offsetAt(sel.active)))
+          .filter(
+            match => match && (match.opening !== match.closing || config.highlightSelfClosing)
+          )
       } else {
         matches = editor.selections.map(
           sel =>
@@ -110,9 +112,7 @@ export function activate(context: vscode.ExtensionContext) {
         )
       }
 
-      matches
-        .filter(match => match && (match.opening !== match.closing || config.highlightSelfClosing))
-        .forEach(match => tagStyler.decoratePair(match as hmt.Match, editor))
+      matches.forEach(match => tagStyler.decoratePair(match as hmt.Match, editor))
     })
   )
 
