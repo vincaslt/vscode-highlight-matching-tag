@@ -84,5 +84,21 @@ suite('TagMatcher Tests', () => {
       assert.deepEqual(getTagForPosition(data, 3), undefined)
       assert.deepEqual(getTagForPosition(data, 4), undefined)
     })
+
+    test('matches self closing tag when flag is true', () => {
+      const data = parseTags('a<a/>a')
+      const expected: hmt.Match = {
+        attributeNestingLevel: 0,
+        opening: { name: 'a', start: 1, end: 5 },
+        closing: { name: 'a', start: 1, end: 5 }
+      }
+      assert.deepEqual(getTagForPosition(data, 0, true), undefined)
+      assert.deepEqual(getTagForPosition(data, 1, true), undefined)
+      assert.deepEqual(getTagForPosition(data, 2, true), expected)
+      assert.deepEqual(getTagForPosition(data, 3, true), expected)
+      assert.deepEqual(getTagForPosition(data, 4, true), expected)
+      assert.deepEqual(getTagForPosition(data, 5, true), undefined)
+      assert.deepEqual(getTagForPosition(data, 6, true), undefined)
+    })
   })
 })

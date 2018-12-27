@@ -274,7 +274,19 @@ suite('TagParser Tests', () => {
       assert.deepEqual(parseTags(data), expected)
     })
 
-    test('self closing tag', () => {
+    test('minimal self closing tag', () => {
+      const data = '<div/>'
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'div', start: 0, end: 6 },
+          closing: { name: 'div', start: 0, end: 6 }
+        }
+      ]
+      assert.deepEqual(parseTags(data), expected)
+    })
+
+    test('self closing tag with whitespace', () => {
       const data = 'nonimportant<div />nonimportant'
       const expected: hmt.PartialMatch[] = [
         {
