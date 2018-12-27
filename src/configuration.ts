@@ -14,6 +14,10 @@ class Configuration {
     return !!this.config.get('highlightSelfClosing')
   }
 
+  get highlightFromContent() {
+    return !!this.config.get('highlightFromContent')
+  }
+
   get showPath() {
     return !!this.config.get('showPath')
   }

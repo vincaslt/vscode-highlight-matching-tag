@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import { jumpToMatchingTag, selectPairContents } from './commands'
 import config from './configuration'
-import { findMatchingTag, getTagsForPosition } from './tagMatcher'
+import { findMatchingTag, getTagForPosition, getTagsForPosition } from './tagMatcher'
 import { parseTags } from './tagParser'
 import TagStyler from './tagStyler'
 
@@ -93,10 +93,27 @@ export function activate(context: vscode.ExtensionContext) {
 
       // Highlight matching tags
       tagStyler.clearDecorations()
-      editor.selections
-        .map(sel => findMatchingTag(tagsList, editor.document.offsetAt(sel.active)))
-        .filter(match => match && (match.opening !== match.closing || config.highlightSelfClosing))
-        .forEach(match => tagStyler.decoratePair(match as hmt.Match, editor))
+
+      let matches = []
+      if (config.highlightFromContent) {
+        matches = editor.selections
+          .map(sel =>
+            getTagForPosition(
+              tagsList,
+              editor.document.offsetAt(sel.active),
+              config.highlightSelfClosing
+            )
+          )
+          .filter(match => match !== undefined)
+      } else {
+        matches = editor.selections
+          .map(sel => findMatchingTag(tagsList, editor.document.offsetAt(sel.active)))
+          .filter(
+            match => match && (match.opening !== match.closing || config.highlightSelfClosing)
+          )
+      }
+
+      matches.forEach(match => tagStyler.decoratePair(match as hmt.Match, editor))
     })
   )
 

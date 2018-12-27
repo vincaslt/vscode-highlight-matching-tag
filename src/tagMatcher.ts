@@ -34,3 +34,13 @@ export function getTagsForPosition(tagsList: hmt.PartialMatch[], position: numbe
     pair => isTagPairValid(pair) && position > pair.opening!.start! && position < pair.closing!.end!
   ) as hmt.Match[]
 }
+
+export function getTagForPosition(
+  tagsList: hmt.PartialMatch[],
+  position: number,
+  includeSelfClosing = false
+): hmt.Match | undefined {
+  return getTagsForPosition(tagsList, position)
+    .filter(tag => tag.opening !== tag.closing || includeSelfClosing)
+    .slice(-1)[0]
+}

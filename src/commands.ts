@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { findMatchingTag, getTagsForPosition } from './tagMatcher'
+import { findMatchingTag, getTagForPosition } from './tagMatcher'
 import { parseTags } from './tagParser'
 
 export async function jumpToMatchingTag() {
@@ -44,7 +44,7 @@ export function selectPairContents() {
   const position = editor.selection.active
   const positionOffset = editor.document.offsetAt(position)
 
-  const activePair = getTagsForPosition(tagsList, positionOffset).slice(-1)[0]
+  const activePair = getTagForPosition(tagsList, positionOffset)
 
   if (activePair) {
     const openingTagEndPos = editor.document.positionAt(activePair.opening.end)

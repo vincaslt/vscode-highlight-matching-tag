@@ -31,8 +31,9 @@ Add any non-default setting to your workspace or user settings, to enable it. Ad
 | --------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
 | `highlight-matching-tag.enabled`              | `true`                                           | Enables/disables the highlighting and status bar                                            |
 | `highlight-matching-tag.showPath`             | `true`                                           | Enables/disables showing path to tag in status bar (e.g. `div > p > a`)                     |
-| `highlight-matching-tag.showRuler`            | `true`                                           | Enables/disables showing highlighted tag pair in ruler section                             |
+| `highlight-matching-tag.showRuler`            | `true`                                           | Enables/disables showing highlighted tag pair in ruler section                              |
 | `highlight-matching-tag.highlightSelfClosing` | `false`                                          | Should self-closing tags be highlighted too (can be useful for multiline self-closing tags) |
+| `highlight-matching-tag.highlightFromContent` | `false`                                          | Whether to highlight from the tag content the closest matching tag pair                     |
 | `highlight-matching-tag.styles`               | `{ opening: { name: { underline: 'yellow' } } }` | Custom styling configuration, see [Styling Options](#styling-options)                       |
 
 ## Styling Options
