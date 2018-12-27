@@ -158,3 +158,7 @@ Used in Command Palette (Win/Linux: `Ctrl`+`Shift`+`P`; Mac: `Cmd`+`Shift`+`P`) 
 
 - Jump to matching tag
 - Select contents of matching tag pair
+
+## Contributing
+
+If you want to contribute to the development of the plugin, please consult the [contribution guidelines](https://github.com/vincaslt/vscode-highlight-matching-tag/blob/master/CONTRIBUTING.md).
