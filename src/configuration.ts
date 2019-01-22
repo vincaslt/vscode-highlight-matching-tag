@@ -4,7 +4,7 @@ import { TagStylerConfig } from './tagStyler'
 const extensionId = 'highlight-matching-tag'
 
 class Configuration {
-  private config = vscode.workspace.getConfiguration(extensionId)
+  private config = this.getActiveConfiguration()
 
   get isEnabled() {
     return !!this.config.get('enabled')
@@ -32,7 +32,12 @@ class Configuration {
 
   public configure(context: vscode.ExtensionContext) {
     context.subscriptions.push(
-      vscode.workspace.onDidChangeConfiguration(this.onConfigurationChanged, this)
+      vscode.workspace.onDidChangeConfiguration(() => {
+        this.config = this.getActiveConfiguration()
+      }, this),
+      vscode.workspace.onDidOpenTextDocument(e => {
+        this.config = this.getActiveConfiguration(e.uri)
+      }, this)
     )
   }
 
@@ -91,14 +96,22 @@ class Configuration {
     this.update('endingStyle', undefined)
   }
 
+  // tslint:disable
   private update<T>(section: string, value: T) {
-    return vscode.workspace
-      .getConfiguration(extensionId)
-      .update(section, value, vscode.ConfigurationTarget.Global)
+    console.log('updatus')
+    return vscode.workspace.getConfiguration(extensionId).update(section, value, true)
   }
 
-  private onConfigurationChanged() {
-    this.config = vscode.workspace.getConfiguration(extensionId)
+  private getActiveConfiguration(uri?: vscode.Uri) {
+    const editor = vscode.window.activeTextEditor
+    if (editor || uri) {
+      console.log('uri', editor && editor.document.uri, uri)
+      return vscode.workspace.getConfiguration(extensionId, uri || editor && editor.document.uri)
+    }
+
+    // TODO this happens only when loading vscode without file open
+    console.log('no workus')
+    return vscode.workspace.getConfiguration(extensionId)
   }
 }
 
