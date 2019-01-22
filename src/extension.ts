@@ -44,17 +44,11 @@ function updateTagStatusBarItem(
   }
 }
 
-export function activate(context: vscode.ExtensionContext) {
-  config.configure(context)
-
-  // Updates version for future migrations
-  const extension = vscode.extensions.getExtension('vincaslt.highlight-matching-tag')
-  const currentVersion: string | undefined = extension && extension.packageJSON.version
-
+function promptSettingsMigration() {
   if (config.hasOldSettings) {
     vscode.window
       .showInformationMessage(
-        'Highlight Matching Tag has new default styles. Would you like to keep your existing styles or discard them and use new ones?',
+        'Workspace is using old tag highlighting styles. Would you like to keep your existing styles or discard them and use default ones?',
         'Keep',
         'Discard'
       )
@@ -62,7 +56,17 @@ export function activate(context: vscode.ExtensionContext) {
         config.migrate(value === 'Keep')
       })
   }
+}
 
+export function activate(context: vscode.ExtensionContext) {
+  // Updates version for future migrations
+  const extension = vscode.extensions.getExtension('vincaslt.highlight-matching-tag')
+  const currentVersion: string | undefined = extension && extension.packageJSON.version
+
+  // Settings may be updated asynchronously, so version update may need to be moved to after settings are checked
+  config.configure({ context, onEditorChange: promptSettingsMigration })
+
+  // Can get previous version, by reading it from hmtVersion global state, as it will be updated only here
   context.globalState.update('hmtVersion', currentVersion)
 
   const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 120)

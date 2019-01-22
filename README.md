@@ -15,7 +15,7 @@ So I'm minimising it by supporting only what I work with:
 - Basic HTML
 - JSX
 
-Other flavors (vue, php, angular) should work, but there are no guarantees. Feel free to report the issues on them still.
+Other flavors (vue, php, angular) should work, but there are no guarantees. Feel free to report the issues on them anyway.
 
 ## Features
 
@@ -25,7 +25,7 @@ Other flavors (vue, php, angular) should work, but there are no guarantees. Feel
 
 ## Extension Settings
 
-Add any non-default setting to your workspace or user settings, to enable it. Add the default setting with different value to override.
+You can override any default [settings](https://code.visualstudio.com/docs/getstarted/settings) with your own values. The plugin supports [workspace settings](https://code.visualstudio.com/docs/editor/multi-root-workspaces) as well as global user settings.
 
 | Variable                                      | Default                                          | Description                                                                                 |
 | --------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------- |

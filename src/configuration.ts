@@ -3,8 +3,16 @@ import { TagStylerConfig } from './tagStyler'
 
 const extensionId = 'highlight-matching-tag'
 
+interface ConfigurationOptions {
+  context: vscode.ExtensionContext
+  onEditorChange: (e: vscode.TextEditor) => void
+}
+
 class Configuration {
-  private config = vscode.workspace.getConfiguration(extensionId)
+  private get config() {
+    const editor = vscode.window.activeTextEditor
+    return vscode.workspace.getConfiguration(extensionId, editor && editor.document.uri)
+  }
 
   get isEnabled() {
     return !!this.config.get('enabled')
@@ -30,12 +38,6 @@ class Configuration {
     return this.config.get<TagStylerConfig>('styles')
   }
 
-  public configure(context: vscode.ExtensionContext) {
-    context.subscriptions.push(
-      vscode.workspace.onDidChangeConfiguration(this.onConfigurationChanged, this)
-    )
-  }
-
   get hasOldSettings() {
     return !!(
       this.config.get('style') ||
@@ -46,59 +48,56 @@ class Configuration {
     )
   }
 
+  public configure({ context, onEditorChange }: ConfigurationOptions) {
+    context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(onEditorChange, this))
+  }
+
   /**
    * Migrates styling settings from version 0.7.1 -> 0.8.0
    */
   public async migrate(keepSettings: boolean) {
-    const oldStyle = this.config.get('style')
-    const oldLeftStyle = this.config.get('leftStyle')
-    const oldRightStyle = this.config.get('rightStyle')
-    const oldBeginningStyle = this.config.get('beginningStyle')
-    const oldEndingStyle = this.config.get('endingStyle')
-    const newStyles = this.styles || { opening: {} }
-
     if (keepSettings) {
-      if (oldStyle) {
-        newStyles.opening.full = { custom: oldStyle }
-        this.update('styles', newStyles)
-      }
-
-      if (oldLeftStyle) {
-        newStyles.opening.left = { custom: oldLeftStyle }
-        this.update('styles', newStyles)
-      }
-
-      if (oldRightStyle) {
-        newStyles.opening.right = { custom: oldRightStyle }
-        this.update('styles', newStyles)
-      }
-
-      if (oldBeginningStyle) {
-        newStyles.opening.full = { custom: oldBeginningStyle }
-        this.update('styles', newStyles)
-      }
-
-      if (oldEndingStyle) {
-        newStyles.opening.full = { custom: oldEndingStyle }
-        this.update('styles', newStyles)
-      }
+      this.migrateStyle('style', 'full')
+      this.migrateStyle('leftStyle', 'left')
+      this.migrateStyle('rightStyle', 'right')
+      this.migrateStyle('beginningStyle', 'full')
+      this.migrateStyle('endingStyle', 'full')
     }
 
-    this.update('style', undefined)
-    this.update('leftStyle', undefined)
-    this.update('rightStyle', undefined)
-    this.update('beginningStyle', undefined)
-    this.update('endingStyle', undefined)
+    this.deleteSetting('style')
+    this.deleteSetting('leftStyle')
+    this.deleteSetting('rightStyle')
+    this.deleteSetting('beginningStyle')
+    this.deleteSetting('endingStyle')
   }
 
-  private update<T>(section: string, value: T) {
-    return vscode.workspace
-      .getConfiguration(extensionId)
-      .update(section, value, vscode.ConfigurationTarget.Global)
+  private deleteSetting = (section: string) => {
+    this.config.update(section, undefined, vscode.ConfigurationTarget.WorkspaceFolder)
+    this.config.update(section, undefined, vscode.ConfigurationTarget.Workspace)
+    this.config.update(section, undefined, vscode.ConfigurationTarget.Global)
   }
 
-  private onConfigurationChanged() {
-    this.config = vscode.workspace.getConfiguration(extensionId)
+  private migrateStyle(oldSection: string, newOpeningSection: string) {
+    const old = this.config.inspect<any>(oldSection)
+    const current = this.config.inspect<any>('styles')
+    if (!old || !current) {
+      return
+    }
+    if (old.workspaceFolderValue) {
+      const newValue = current.workspaceFolderValue || { opening: {} }
+      newValue.opening[newOpeningSection] = { custom: old.workspaceFolderValue }
+      this.config.update('styles', newValue, vscode.ConfigurationTarget.WorkspaceFolder)
+    }
+    if (old.workspaceValue) {
+      const newValue = current.workspaceValue || { opening: {} }
+      newValue.opening[newOpeningSection] = { custom: old.workspaceValue }
+      this.config.update('styles', newValue, vscode.ConfigurationTarget.Workspace)
+    }
+    if (old.globalValue) {
+      const newValue = current.globalValue || { opening: {} }
+      newValue.opening[newOpeningSection] = { custom: old.globalValue }
+      this.config.update('styles', newValue, vscode.ConfigurationTarget.Global)
+    }
   }
 }
 

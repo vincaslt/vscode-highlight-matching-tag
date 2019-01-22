@@ -2,7 +2,7 @@
   "name": "highlight-matching-tag",
   "displayName": "Highlight Matching Tag",
   "description": "Highlights matching closing or opening tag",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "publisher": "vincaslt",
   "icon": "icon.png",
   "repository": {
@@ -22,6 +22,7 @@
   "activationEvents": [
     "*"
   ],
+  "keywords": ["multi-root ready", "underline"],
   "main": "./out/src/extension",
   "contributes": {
     "configuration": {
@@ -31,32 +32,38 @@
         "highlight-matching-tag.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Enables the highlighting and status bar"
+          "description": "Enables the highlighting and status bar",
+          "scope": "resource"
         },
         "highlight-matching-tag.showPath": {
           "type": "boolean",
           "default": true,
-          "description": "Enables showing tag's path in status bar"
+          "description": "Enables showing tag's path in status bar",
+          "scope": "resource"
         },
         "highlight-matching-tag.showRuler": {
           "type": "boolean",
           "default": true,
-          "description": "Enables showing highlighted tag pair in ruler section"
+          "description": "Enables showing highlighted tag pair in ruler section",
+          "scope": "resource"
         },
         "highlight-matching-tag.highlightSelfClosing": {
           "type": "boolean",
           "default": false,
-          "description": "Should self-closing tags be highlighted"
+          "description": "Should self-closing tags be highlighted",
+          "scope": "resource"
         },
         "highlight-matching-tag.highlightFromContent": {
           "type": "boolean",
           "default": false,
-          "description": "Whether to highlight from the tag content the closest matching tag pair"
+          "description": "Whether to highlight from the tag content the closest matching tag pair",
+          "scope": "resource"
         },
         "highlight-matching-tag.styles": {
           "type": "object",
           "default": null,
           "description": "Decorations for opening and closing tags",
+          "scope": "resource",
           "properties": {
             "opening": {
               "type": "object",
@@ -500,19 +507,24 @@
           ]
         },
         "highlight-matching-tag.style": {
-          "description": "Removed in 0.8.0, use styles"
+          "description": "Removed in 0.8.0, use styles",
+          "scope": "resource"
         },
         "highlight-matching-tag.leftStyle": {
-          "description": "Removed in 0.8.0, use styles"
+          "description": "Removed in 0.8.0, use styles",
+          "scope": "resource"
         },
         "highlight-matching-tag.rightStyle": {
-          "description": "Removed in 0.8.0, use styles"
+          "description": "Removed in 0.8.0, use styles",
+          "scope": "resource"
         },
         "highlight-matching-tag.endingStyle": {
-          "description": "Removed in 0.8.0, use styles"
+          "description": "Removed in 0.8.0, use styles",
+          "scope": "resource"
         },
         "highlight-matching-tag.beginningStyle": {
-          "description": "Removed in 0.8.0, use styles"
+          "description": "Removed in 0.8.0, use styles",
+          "scope": "resource"
         }
       }
     },

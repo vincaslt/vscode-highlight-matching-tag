@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "higlight-matching-tag" extension will be documented in this file.
 
+### 0.8.6
+
+* Add support for multi-root workspaces
+
 ### 0.8.5
 
 * Added option to highlight surrounding tag pair from tag's inner content by @KamasamaK
