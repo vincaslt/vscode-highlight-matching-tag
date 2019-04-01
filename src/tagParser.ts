@@ -1,5 +1,23 @@
 import lexer from './tagLexer'
 
+const emptyTags = [
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'keygen',
+  'link',
+  'meta',
+  'param',
+  'source',
+  'track',
+  'wbr'
+]
+
 // Returns a list of partial tag pairs that exist in the given text
 export function parseTags(text: string): hmt.PartialMatch[] {
   // Here the tags will be put as they are resolved
@@ -51,6 +69,7 @@ export function parseTags(text: string): hmt.PartialMatch[] {
 
   // Every block inside of attribute has higher level, to avoid matching with outside
   let attributeNestingLevel = 0
+  let lastOpening: hmt.Tag
 
   lexer.reset(text)
   let match = lexer.next()
@@ -67,13 +86,16 @@ export function parseTags(text: string): hmt.PartialMatch[] {
         attributeNestingLevel += 1
         break
       case 'closeTag':
-        closeLastOpening(match.offset + 1)
+        lastOpening = closeLastOpening(match.offset + 1) as hmt.Tag
         attributeNestingLevel -= 1
+        if (emptyTags.includes(lastOpening.name)) {
+          closeMatchingOpeningTag(lastOpening, attributeNestingLevel)
+        }
         break
       case 'tagSelfClose':
-        const lastOpening = closeLastOpening(match.offset + 2)
+        lastOpening = closeLastOpening(match.offset + 2) as hmt.Tag
         attributeNestingLevel -= 1
-        closeMatchingOpeningTag(lastOpening as hmt.Tag, attributeNestingLevel)
+        closeMatchingOpeningTag(lastOpening, attributeNestingLevel)
         break
       case 'tagClosing':
         closeMatchingOpeningTag(
