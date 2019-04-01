@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "higlight-matching-tag" extension will be documented in this file.
 
+### 0.9.0
+
+* Add support for [empty elements](https://developer.mozilla.org/en-US/docs/Glossary/Empty_element) to be highlighted as self-closing tags.
+
 ### 0.8.6
 
 * Add support for multi-root workspaces
