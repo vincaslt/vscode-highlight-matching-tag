@@ -81,7 +81,8 @@ suite('TagParser Tests', () => {
         },
         {
           attributeNestingLevel: 0,
-          opening: { name: 'input', start: 193, end: 305 }
+          opening: { name: 'input', start: 193, end: 305 },
+          closing: { name: 'input', start: 193, end: 305 }
         },
         {
           attributeNestingLevel: 0,
@@ -453,7 +454,8 @@ suite('TagParser Tests', () => {
         },
         {
           attributeNestingLevel: 0,
-          opening: { name: 'input', start: 5, end: 26 }
+          opening: { name: 'input', start: 5, end: 26 },
+          closing: { name: 'input', start: 5, end: 26 }
         }
       ]
       assert.deepEqual(parseTags(data), expected)
@@ -469,7 +471,8 @@ suite('TagParser Tests', () => {
         },
         {
           attributeNestingLevel: 1,
-          opening: { name: 'input', start: 11, end: 32 }
+          opening: { name: 'input', start: 11, end: 32 },
+          closing: { name: 'input', start: 11, end: 32 }
         }
       ]
       assert.deepEqual(parseTags(data), expected)
@@ -518,6 +521,97 @@ suite('TagParser Tests', () => {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 14 },
           closing: { name: 'div', start: 21, end: 27 }
+        }
+      ]
+      assert.deepEqual(parseTags(data), expected)
+    })
+
+    test('empty elements as self closing tags', () => {
+      const data = `
+        <div>
+          <area><base><br><col><embed><hr><img><input><keygen><link><meta><param><source><track><wbr>
+        </div>
+      `.trim()
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'div', start: 0, end: 5 },
+          closing: { name: 'div', start: 116, end: 122 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'area', start: 16, end: 22 },
+          closing: { name: 'area', start: 16, end: 22 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'base', start: 22, end: 28 },
+          closing: { name: 'base', start: 22, end: 28 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'br', start: 28, end: 32 },
+          closing: { name: 'br', start: 28, end: 32 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'col', start: 32, end: 37 },
+          closing: { name: 'col', start: 32, end: 37 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'embed', start: 37, end: 44 },
+          closing: { name: 'embed', start: 37, end: 44 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'hr', start: 44, end: 48 },
+          closing: { name: 'hr', start: 44, end: 48 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'img', start: 48, end: 53 },
+          closing: { name: 'img', start: 48, end: 53 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'input', start: 53, end: 60 },
+          closing: { name: 'input', start: 53, end: 60 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'keygen', start: 60, end: 68 },
+          closing: { name: 'keygen', start: 60, end: 68 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'link', start: 68, end: 74 },
+          closing: { name: 'link', start: 68, end: 74 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'meta', start: 74, end: 80 },
+          closing: { name: 'meta', start: 74, end: 80 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'param', start: 80, end: 87 },
+          closing: { name: 'param', start: 80, end: 87 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'source', start: 87, end: 95 },
+          closing: { name: 'source', start: 87, end: 95 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'track', start: 95, end: 102 },
+          closing: { name: 'track', start: 95, end: 102 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'wbr', start: 102, end: 107 },
+          closing: { name: 'wbr', start: 102, end: 107 }
         }
       ]
       assert.deepEqual(parseTags(data), expected)
