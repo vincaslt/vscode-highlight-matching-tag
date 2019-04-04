@@ -59,6 +59,18 @@
           "description": "Whether to highlight from the tag content the closest matching tag pair",
           "scope": "resource"
         },
+        "highlight-matching-tag.noDefaultEmptyElements": {
+          "type": "boolean",
+          "default": false,
+          "description": "Don't use default HTML empty elements",
+          "scope": "resource"
+        },
+        "highlight-matching-tag.customEmptyElements": {
+          "type": "array",
+          "default": null,
+          "description": "Custom empty elements in addition to the default HTML empty elements",
+          "scope": "resource"
+        },
         "highlight-matching-tag.styles": {
           "type": "object",
           "default": null,

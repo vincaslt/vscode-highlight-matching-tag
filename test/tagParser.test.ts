@@ -1,4 +1,5 @@
 import * as assert from 'assert'
+import { defaultEmptyElements } from '../src/configuration'
 import { parseTags } from '../src/tagParser'
 
 suite('TagParser Tests', () => {
@@ -17,7 +18,7 @@ suite('TagParser Tests', () => {
           opening: { name: 'cfset', start: 0, end: 69 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('string attribute with escapes inside', () => {
@@ -29,7 +30,7 @@ suite('TagParser Tests', () => {
           opening: { name: 'cffile', start: 0, end: 77 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('escaped string in attribute', () => {
@@ -41,7 +42,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 23, end: 29 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('OPTIONAL: inverse matching', () => {
@@ -100,7 +101,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'i', start: 467, end: 471 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('function call as an attribute value', () => {
@@ -112,7 +113,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'cfset', start: 55, end: 63 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('vue-js special syntax', () => {
@@ -124,7 +125,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'element-tag', start: 43, end: 57 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('challenging jsx syntax', () => {
@@ -153,7 +154,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 121, end: 127 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('function as an attribute without block', () => {
@@ -175,7 +176,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'cfif', start: 135, end: 142 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('angular syntax', () => {
@@ -230,7 +231,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'p', start: 319, end: 323 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('php syntax + bad formatting', () => {
@@ -246,7 +247,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 83, end: 89 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
   })
 
@@ -254,13 +255,13 @@ suite('TagParser Tests', () => {
     test('works with nothing passed', () => {
       const data = ''
       const expected: hmt.PartialMatch[] = []
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('works with just > symbol', () => {
       const data = '>'
       const expected: hmt.PartialMatch[] = []
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('ignore non tag content', () => {
@@ -272,7 +273,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 17, end: 23 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('minimal self closing tag', () => {
@@ -284,7 +285,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 0, end: 6 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('self closing tag with whitespace', () => {
@@ -296,7 +297,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 12, end: 19 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('simple opening and closing tag', () => {
@@ -308,7 +309,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 12, end: 18 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('simple nested tags', () => {
@@ -330,7 +331,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'self-closing', start: 11, end: 27 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('simple tag with attributes', () => {
@@ -342,7 +343,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 40, end: 46 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('simple tag with attributes', () => {
@@ -354,7 +355,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 40, end: 46 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
   })
 
@@ -374,7 +375,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'span', start: 29, end: 36 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('tag deep in the attribute value', () => {
@@ -408,7 +409,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'a', start: 52, end: 56 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('React fragments', () => {
@@ -420,7 +421,7 @@ suite('TagParser Tests', () => {
           closing: { name: '', start: 13, end: 16 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('unopened tag', () => {
@@ -441,7 +442,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'c', start: 6, end: 10 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('unclosed tag', () => {
@@ -458,7 +459,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'input', start: 5, end: 26 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('unclosed tag inside attribute', () => {
@@ -475,7 +476,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'input', start: 11, end: 32 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('unopened same tag inside attribute', () => {
@@ -491,7 +492,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 11, end: 17 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('unopened same tag outside as attribute', () => {
@@ -511,7 +512,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 14, end: 20 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('string as an attribute', () => {
@@ -523,7 +524,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'div', start: 21, end: 27 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('empty elements as self closing tags', () => {
@@ -614,7 +615,7 @@ suite('TagParser Tests', () => {
           closing: { name: 'wbr', start: 102, end: 107 }
         }
       ]
-      assert.deepEqual(parseTags(data), expected)
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
   })
 })

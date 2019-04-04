@@ -1,25 +1,7 @@
 import lexer from './tagLexer'
 
-const emptyTags = [
-  'area',
-  'base',
-  'br',
-  'col',
-  'embed',
-  'hr',
-  'img',
-  'input',
-  'keygen',
-  'link',
-  'meta',
-  'param',
-  'source',
-  'track',
-  'wbr'
-]
-
 // Returns a list of partial tag pairs that exist in the given text
-export function parseTags(text: string): hmt.PartialMatch[] {
+export function parseTags(text: string, emptyElements: string[] = []): hmt.PartialMatch[] {
   // Here the tags will be put as they are resolved
   const workingList: hmt.PartialMatch[] = []
 
@@ -88,7 +70,7 @@ export function parseTags(text: string): hmt.PartialMatch[] {
       case 'closeTag':
         lastOpening = closeLastOpening(match.offset + 1) as hmt.Tag
         attributeNestingLevel -= 1
-        if (emptyTags.includes(lastOpening.name)) {
+        if (emptyElements.includes(lastOpening.name)) {
           closeMatchingOpeningTag(lastOpening, attributeNestingLevel)
         }
         break
