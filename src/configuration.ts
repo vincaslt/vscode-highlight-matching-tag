@@ -2,6 +2,23 @@ import * as vscode from 'vscode'
 import { TagStylerConfig } from './tagStyler'
 
 const extensionId = 'highlight-matching-tag'
+const defaultEmptyElements = [
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'keygen',
+  'link',
+  'meta',
+  'param',
+  'source',
+  'track',
+  'wbr'
+]
 
 interface ConfigurationOptions {
   context: vscode.ExtensionContext
@@ -32,6 +49,12 @@ class Configuration {
 
   get showRuler() {
     return !!this.config.get('showRuler')
+  }
+
+  get emptyElements() {
+    const defaultEmptyTags = this.config.get('noDefaultEmptyElements') ? [] : defaultEmptyElements
+    const customEmptyTags = this.config.get<string[]>('customEmptyElements') || []
+    return [...defaultEmptyTags, ...customEmptyTags]
   }
 
   get styles() {
@@ -102,4 +125,5 @@ class Configuration {
 }
 
 const configuration = new Configuration()
+export { defaultEmptyElements }
 export default configuration

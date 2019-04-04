@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the "higlight-matching-tag" extension will be documented in this file.
 
+### 0.9.1
+
+* Allow customization of empty elements via configuration options.
+* Improve readme
+
 ### 0.9.0
 
 * Add support for [empty elements](https://developer.mozilla.org/en-US/docs/Glossary/Empty_element) to be highlighted as self-closing tags.
