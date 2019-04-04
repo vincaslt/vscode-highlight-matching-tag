@@ -73,6 +73,8 @@ Each of the above are **_Decoration_** objects that define tag's style with opti
 - `surround` - surrounding border's color
 - `custom` - custom css rules for styling ([`vscode.DecorationRenderOptions`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions)). This is basically an object with camelCase CSS rules. It also can accept different styles for light or dark color themes.
 
+Colors used in gutter are the same as the ones used for highligting/underlining, or yellow by default for custom rules. You can change them by setting: `overviewRulerColor` decoration option to the color that you want.
+
 ### Styling Examples
 
 This is the old version's style, with the new styling options:
@@ -85,7 +87,8 @@ This is the old version's style, with the new styling options:
         "borderWidth": "0 0 0 1px",
         "borderStyle": "dotted",
         "borderColor": "white",
-        "borderRadius": "5px"
+        "borderRadius": "5px",
+        "overviewRulerColor": "white"
       }
     },
     "right": {
@@ -93,7 +96,8 @@ This is the old version's style, with the new styling options:
         "borderWidth": "0 1px 0 0",
         "borderStyle": "dotted",
         "borderColor": "white",
-        "borderRadius": "5px"
+        "borderRadius": "5px",
+        "overviewRulerColor": "white"
       }
     }
   }
