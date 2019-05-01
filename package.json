@@ -22,7 +22,10 @@
   "activationEvents": [
     "*"
   ],
-  "keywords": ["multi-root ready", "underline"],
+  "keywords": [
+    "multi-root ready",
+    "underline"
+  ],
   "main": "./out/src/extension",
   "contributes": {
     "configuration": {
@@ -33,49 +36,49 @@
           "type": "boolean",
           "default": true,
           "description": "Enables the highlighting and status bar",
-          "scope": "resource"
+          "scope": "window"
         },
         "highlight-matching-tag.showPath": {
           "type": "boolean",
           "default": true,
           "description": "Enables showing tag's path in status bar",
-          "scope": "resource"
+          "scope": "window"
         },
         "highlight-matching-tag.showRuler": {
           "type": "boolean",
           "default": true,
           "description": "Enables showing highlighted tag pair in ruler section",
-          "scope": "resource"
+          "scope": "window"
         },
         "highlight-matching-tag.highlightSelfClosing": {
           "type": "boolean",
           "default": false,
           "description": "Should self-closing tags be highlighted",
-          "scope": "resource"
+          "scope": "window"
         },
         "highlight-matching-tag.highlightFromContent": {
           "type": "boolean",
           "default": false,
           "description": "Whether to highlight from the tag content the closest matching tag pair",
-          "scope": "resource"
+          "scope": "window"
         },
         "highlight-matching-tag.noDefaultEmptyElements": {
           "type": "boolean",
           "default": false,
           "description": "Don't use default HTML empty elements",
-          "scope": "resource"
+          "scope": "window"
         },
         "highlight-matching-tag.customEmptyElements": {
           "type": "array",
           "default": null,
           "description": "Custom empty elements in addition to the default HTML empty elements",
-          "scope": "resource"
+          "scope": "window"
         },
         "highlight-matching-tag.styles": {
           "type": "object",
           "default": null,
           "description": "Decorations for opening and closing tags",
-          "scope": "resource",
+          "scope": "window",
           "properties": {
             "opening": {
               "type": "object",
@@ -520,23 +523,23 @@
         },
         "highlight-matching-tag.style": {
           "description": "Removed in 0.8.0, use styles",
-          "scope": "resource"
+          "scope": "window"
         },
         "highlight-matching-tag.leftStyle": {
           "description": "Removed in 0.8.0, use styles",
-          "scope": "resource"
+          "scope": "window"
         },
         "highlight-matching-tag.rightStyle": {
           "description": "Removed in 0.8.0, use styles",
-          "scope": "resource"
+          "scope": "window"
         },
         "highlight-matching-tag.endingStyle": {
           "description": "Removed in 0.8.0, use styles",
-          "scope": "resource"
+          "scope": "window"
         },
         "highlight-matching-tag.beginningStyle": {
           "description": "Removed in 0.8.0, use styles",
-          "scope": "resource"
+          "scope": "window"
         }
       }
     },
