@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "higlight-matching-tag" extension will be documented in this file.
 
+### 0.9.2
+
+* New configuration options: `highlightFromName` and `hightlightFromAttributes`
+
 ### 0.9.1
 
 * Allow customization of empty elements via configuration options.

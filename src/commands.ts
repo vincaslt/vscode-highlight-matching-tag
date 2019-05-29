@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import config from './configuration'
 import { findMatchingTag, getTagForPosition } from './tagMatcher'
 import { parseTags } from './tagParser'
 
@@ -13,7 +14,12 @@ export async function jumpToMatchingTag() {
   const position = editor.selection.active
   const positionOffset = editor.document.offsetAt(position)
 
-  const match = findMatchingTag(tagsList, positionOffset)
+  const match = findMatchingTag(
+    tagsList,
+    positionOffset,
+    config.highlightFromName,
+    config.highlightFromAttributes
+  )
 
   if (match) {
     const openingTagStartPos = editor.document.positionAt(match.opening.start)

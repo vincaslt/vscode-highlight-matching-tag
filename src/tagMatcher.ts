@@ -10,14 +10,32 @@ function isTagPairValid(pair: hmt.PartialMatch): boolean {
 
 export function findMatchingTag(
   tagsList: hmt.PartialMatch[],
-  position: number
+  position: number,
+  matchFromName: boolean,
+  matchFromAttributes: boolean
 ): hmt.Match | undefined {
   for (let i = tagsList.length - 1; i >= 0; i--) {
-    if (
-      isTagPairValid(tagsList[i]) &&
-      ((position > tagsList[i].opening!.start! && position < tagsList[i].opening!.end!) ||
-        (position > tagsList[i].closing!.start! && position < tagsList[i].closing!.end!))
-    ) {
+    if (!isTagPairValid(tagsList[i])) {
+      continue
+    }
+
+    const openingStart = tagsList[i].opening!.start!
+    const openingEnd = tagsList[i].opening!.end!
+    const closingStart = tagsList[i].closing!.start!
+    const closingEnd = tagsList[i].closing!.end!
+
+    const positionInName =
+      (position > openingStart &&
+        position <= openingStart + tagsList[i].opening!.name!.length + 1) ||
+      (position > closingStart + 1 &&
+        position <= closingStart + tagsList[i].closing!.name!.length + 2)
+
+    const positionInAttributes =
+      !positionInName &&
+      ((position > openingStart && position < openingEnd) ||
+        (position > closingStart && position < closingEnd))
+
+    if ((positionInName && matchFromName) || (positionInAttributes && matchFromAttributes)) {
       return {
         attributeNestingLevel: tagsList[i].attributeNestingLevel,
         opening: tagsList[i].opening as hmt.Tag,
