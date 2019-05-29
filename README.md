@@ -27,16 +27,18 @@ Other flavors (vue, php, angular) should work, but there are no guarantees. Feel
 
 You can override any default [settings](https://code.visualstudio.com/docs/getstarted/settings) with your own values. The plugin supports [workspace settings](https://code.visualstudio.com/docs/editor/multi-root-workspaces) as well as global user settings.
 
-| Variable                                        | Default                                          | Description                                                                                 |
-| ----------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
-| `highlight-matching-tag.enabled`                | `true`                                           | Enables/disables the highlighting and status bar                                            |
-| `highlight-matching-tag.showPath`               | `true`                                           | Enables/disables showing path to tag in status bar (e.g. `div > p > a`)                     |
-| `highlight-matching-tag.showRuler`              | `true`                                           | Enables/disables showing highlighted tag pair in ruler section                              |
-| `highlight-matching-tag.highlightSelfClosing`   | `false`                                          | Should self-closing tags be highlighted too (can be useful for multiline self-closing tags) |
-| `highlight-matching-tag.highlightFromContent`   | `false`                                          | Whether to highlight from the tag content the closest matching tag pair                     |
-| `highlight-matching-tag.noDefaultEmptyElements` | `false`                                          | Don't use default HTML empty elements                                                       |
-| `highlight-matching-tag.customEmptyElements`    | `null`                                           | Custom [empty elements](#empty-elements) in addition to the default HTML empty elements     |
-| `highlight-matching-tag.styles`                 | `{ opening: { name: { underline: 'yellow' } } }` | Custom styling configuration, see [Styling Options](#styling-options)                       |
+| Variable                                         | Default                                          | Description                                                                                 |
+| ------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `highlight-matching-tag.enabled`                 | `true`                                           | Enables/disables the highlighting and status bar                                            |
+| `highlight-matching-tag.showPath`                | `true`                                           | Enables/disables showing path to tag in status bar (e.g. `div > p > a`)                     |
+| `highlight-matching-tag.showRuler`               | `true`                                           | Enables/disables showing highlighted tag pair in ruler section                              |
+| `highlight-matching-tag.highlightSelfClosing`    | `false`                                          | Should self-closing tags be highlighted too (can be useful for multiline self-closing tags) |
+| `highlight-matching-tag.highlightFromContent`    | `false`                                          | Whether to highlight matching tag from inside the tag content                               |
+| `highlight-matching-tag.highlightFromName`       | `true`                                           | Whether to highlight matching tag from the tag name                                         |
+| `highlight-matching-tag.highlightFromAttributes` | `true`                                           | Whether to highlight matching tag from the tag attributes                                   |
+| `highlight-matching-tag.noDefaultEmptyElements`  | `false`                                          | Don't use default HTML empty elements                                                       |
+| `highlight-matching-tag.customEmptyElements`     | `null`                                           | Custom [empty elements](#empty-elements) in addition to the default HTML empty elements     |
+| `highlight-matching-tag.styles`                  | `{ opening: { name: { underline: 'yellow' } } }` | Custom styling configuration, see [Styling Options](#styling-options)                       |
 
 ## Styling Options
 

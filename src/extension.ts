@@ -111,7 +111,14 @@ export function activate(context: vscode.ExtensionContext) {
           .filter(match => match !== undefined)
       } else {
         matches = editor.selections
-          .map(sel => findMatchingTag(tagsList, editor.document.offsetAt(sel.active)))
+          .map(sel =>
+            findMatchingTag(
+              tagsList,
+              editor.document.offsetAt(sel.active),
+              config.highlightFromName,
+              config.highlightFromAttributes
+            )
+          )
           .filter(
             match => match && (match.opening !== match.closing || config.highlightSelfClosing)
           )

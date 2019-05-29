@@ -11,15 +11,15 @@ suite('TagMatcher Tests', () => {
         opening: { name: 'a', start: 0, end: 3 },
         closing: { name: 'a', start: 4, end: 8 }
       }
-      assert.deepEqual(findMatchingTag(data, 0), undefined)
-      assert.deepEqual(findMatchingTag(data, 1), expected)
-      assert.deepEqual(findMatchingTag(data, 2), expected)
-      assert.deepEqual(findMatchingTag(data, 3), undefined)
-      assert.deepEqual(findMatchingTag(data, 4), undefined)
-      assert.deepEqual(findMatchingTag(data, 5), expected)
-      assert.deepEqual(findMatchingTag(data, 6), expected)
-      assert.deepEqual(findMatchingTag(data, 7), expected)
-      assert.deepEqual(findMatchingTag(data, 8), undefined)
+      assert.deepEqual(findMatchingTag(data, 0, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 1, true, true), expected)
+      assert.deepEqual(findMatchingTag(data, 2, true, true), expected)
+      assert.deepEqual(findMatchingTag(data, 3, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 4, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 5, true, true), expected)
+      assert.deepEqual(findMatchingTag(data, 6, true, true), expected)
+      assert.deepEqual(findMatchingTag(data, 7, true, true), expected)
+      assert.deepEqual(findMatchingTag(data, 8, true, true), undefined)
     })
 
     test('can match nested with invalid tags', () => {
@@ -29,31 +29,31 @@ suite('TagMatcher Tests', () => {
         opening: { name: 'b', start: 3, end: 6 },
         closing: { name: 'b', start: 10, end: 14 }
       }
-      assert.deepEqual(findMatchingTag(data, 0), undefined)
-      assert.deepEqual(findMatchingTag(data, 4), expected)
-      assert.deepEqual(findMatchingTag(data, 12), expected)
-      assert.deepEqual(findMatchingTag(data, 1), undefined)
-      assert.deepEqual(findMatchingTag(data, 8), undefined)
+      assert.deepEqual(findMatchingTag(data, 0, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 4, true, true), expected)
+      assert.deepEqual(findMatchingTag(data, 12, true, true), expected)
+      assert.deepEqual(findMatchingTag(data, 1, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 8, true, true), undefined)
     })
 
     test('does not match unclosed tags', () => {
       const data = parseTags('<a>a')
-      assert.deepEqual(findMatchingTag(data, 0), undefined)
-      assert.deepEqual(findMatchingTag(data, 1), undefined)
-      assert.deepEqual(findMatchingTag(data, 2), undefined)
-      assert.deepEqual(findMatchingTag(data, 3), undefined)
-      assert.deepEqual(findMatchingTag(data, 4), undefined)
+      assert.deepEqual(findMatchingTag(data, 0, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 1, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 2, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 3, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 4, true, true), undefined)
     })
 
     test('does not match unfinished opening tags', () => {
       const data = parseTags('<a</a>')
-      assert.deepEqual(findMatchingTag(data, 0), undefined)
-      assert.deepEqual(findMatchingTag(data, 1), undefined)
-      assert.deepEqual(findMatchingTag(data, 2), undefined)
-      assert.deepEqual(findMatchingTag(data, 3), undefined)
-      assert.deepEqual(findMatchingTag(data, 4), undefined)
-      assert.deepEqual(findMatchingTag(data, 5), undefined)
-      assert.deepEqual(findMatchingTag(data, 6), undefined)
+      assert.deepEqual(findMatchingTag(data, 0, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 1, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 2, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 3, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 4, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 5, true, true), undefined)
+      assert.deepEqual(findMatchingTag(data, 6, true, true), undefined)
     })
   })
 

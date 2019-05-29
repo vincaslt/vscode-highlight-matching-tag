@@ -43,6 +43,14 @@ class Configuration {
     return !!this.config.get('highlightFromContent')
   }
 
+  get highlightFromName() {
+    return !!this.config.get('highlightFromName')
+  }
+
+  get highlightFromAttributes() {
+    return !!this.config.get('highlightFromAttributes')
+  }
+
   get showPath() {
     return !!this.config.get('showPath')
   }
