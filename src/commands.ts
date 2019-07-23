@@ -10,7 +10,7 @@ export async function jumpToMatchingTag() {
     return
   }
 
-  const tagsList = parseTags(editor.document.getText())
+  const tagsList = parseTags(editor.document.getText(), config.emptyElements)
   const position = editor.selection.active
   const positionOffset = editor.document.offsetAt(position)
 
@@ -46,7 +46,7 @@ export function selectPairContents() {
     return
   }
 
-  const tagsList = parseTags(editor.document.getText())
+  const tagsList = parseTags(editor.document.getText(), config.emptyElements)
   const position = editor.selection.active
   const positionOffset = editor.document.offsetAt(position)
 

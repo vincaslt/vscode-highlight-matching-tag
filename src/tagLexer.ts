@@ -25,7 +25,7 @@ const blockState = (closingChar: string): moo.Rules => {
 export default moo.states({
   main: {
     // Try to match anything that looks like a tag
-    tagOpening: { match: /<(?!\/)(?=>|\w)[^\/>\s\}\)\]\'\"]*(?=[^]*>)(?=\s|\/?>)/, push: 'inTag' },
+    tagOpening: { match: /<(?!\/)(?=>|\w)[\w-]*(?=[^]*>)(?=\s|\/?>)/, push: 'inTag' },
 
     // Closing tag
     tagClosing: /<\/\S*?>/,

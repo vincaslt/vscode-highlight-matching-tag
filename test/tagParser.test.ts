@@ -617,5 +617,11 @@ suite('TagParser Tests', () => {
       ]
       assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
+
+    test('comparation not mistaken for tags', () => {
+      const data = 'if (i<2) return 3>2'
+      const expected: hmt.PartialMatch[] = []
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
+    })
   })
 })

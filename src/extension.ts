@@ -87,7 +87,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       if (editorText !== editor.document.getText()) {
         editorText = editor.document.getText()
-        tagsList = parseTags(editorText)
+        tagsList = parseTags(editorText, config.emptyElements)
       }
 
       // Tag breadcrumbs
