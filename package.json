@@ -2,7 +2,7 @@
   "name": "highlight-matching-tag",
   "displayName": "Highlight Matching Tag",
   "description": "Highlights matching closing or opening tag",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "publisher": "vincaslt",
   "icon": "icon.png",
   "repository": {
@@ -23,7 +23,10 @@
   "activationEvents": [
     "*"
   ],
-  "keywords": ["multi-root ready", "underline"],
+  "keywords": [
+    "multi-root ready",
+    "underline"
+  ],
   "main": "./out/src/extension",
   "contributes": {
     "configuration": {
