@@ -2,6 +2,10 @@
 
 All notable changes to the "higlight-matching-tag" extension will be documented in this file.
 
+### 0.9.5
+
+- Fixes matching for xml namespaces.
+
 ### 0.9.4
 
 - Fixes matching for tags with dot in their name.

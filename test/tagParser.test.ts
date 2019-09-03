@@ -128,6 +128,30 @@ suite('TagParser Tests', () => {
       assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
+    test('xml namespaces', () => {
+      const data = '<ns:element></ns:element>'
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'ns:element', start: 0, end: 12 },
+          closing: { name: 'ns:element', start: 12, end: 25 }
+        }
+      ]
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
+    })
+
+    test('dot separated tag name', () => {
+      const data = '<ns.element></ns.element>'
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'ns.element', start: 0, end: 12 },
+          closing: { name: 'ns.element', start: 12, end: 25 }
+        }
+      ]
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
+    })
+
     test('challenging jsx syntax', () => {
       const data = `
           <Carousel
