@@ -87,6 +87,16 @@ export function activate(context: vscode.ExtensionContext) {
 
       if (editorText !== editor.document.getText()) {
         editorText = editor.document.getText()
+        
+        // Preprocess text for comments (replace comments with string of spaces)
+        let match;
+        let regEx = /<!--((?!<!--)[\s\S])*-->/gm; //matches comments
+        while (match = regEx.exec(editorText)) {
+            let len = match[0].length
+            let repl = " ".repeat(len);
+            editorText = editorText.substring(0, match.index) + repl + editorText.substring(match.index + len); //replace comment with spaces
+        }
+        
         tagsList = parseTags(editorText, config.emptyElements)
       }
 
