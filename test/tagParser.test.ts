@@ -647,5 +647,21 @@ suite('TagParser Tests', () => {
       const expected: hmt.PartialMatch[] = []
       assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
+
+    test('ignore tags in comments', () => {
+      const data = `
+        <div class="tag">
+          <!-- </div> some text <div> -->
+        </div>
+      `.trim()
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'div', start: 0, end: 17 },
+          closing: { name: 'div', start: 68, end: 74 }
+        }
+      ]
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
+    })
   })
 })
