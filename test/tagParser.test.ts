@@ -647,5 +647,43 @@ suite('TagParser Tests', () => {
       const expected: hmt.PartialMatch[] = []
       assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
+
+    test('ignore tags in html comments', () => {
+      const data = `
+        <div class="tag">
+          <!-- </div> some text <div> -->
+        </div>
+      `.trim()
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'div', start: 0, end: 17 },
+          closing: { name: 'div', start: 68, end: 74 }
+        }
+      ]
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
+    })
+
+    test('ignore tags in JSX comments', () => {
+      const data = `
+        <div className="dropdown">
+          {/* text </div> more text */}
+          <Button whenClicked={this.onClick} ></Button>
+        </div>
+      `.trim()
+      const expected: hmt.PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'div', start: 0, end: 26 },
+          closing: { name: 'div', start: 131, end: 137 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'Button', start: 77, end: 113 },
+          closing: { name: 'Button', start: 113, end: 122 }
+        }
+      ]
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
+    })
   })
 })
