@@ -2,6 +2,10 @@
 
 All notable changes to the "higlight-matching-tag" extension will be documented in this file.
 
+### 0.9.6
+
+- Fix tags matching with tags in comments, by @helix026
+
 ### 0.9.5
 
 - Fixes matching for xml namespaces.
