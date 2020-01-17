@@ -19,7 +19,10 @@
   "categories": [
     "Other"
   ],
-  "extensionKind": "ui",
+    "extensionKind": [
+		"ui",
+		"workspace"
+	],
   "activationEvents": [
     "*"
   ],
