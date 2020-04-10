@@ -54,7 +54,6 @@ function promptSettingsMigration() {
 export function activate(context: vscode.ExtensionContext) {
   // Updates version for future migrations
   const extension = vscode.extensions.getExtension('vincaslt.highlight-matching-tag')
-  const oldVersion: string | undefined = context.globalState.get('hmtVersion')
   const newVersion: string | undefined = extension && extension.packageJSON.version
 
   // Settings may be updated asynchronously, so version update may need to be moved to after settings are checked

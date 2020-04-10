@@ -2,7 +2,7 @@
   "name": "highlight-matching-tag",
   "displayName": "Highlight Matching Tag",
   "description": "Highlights matching closing and opening tags",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "publisher": "vincaslt",
   "icon": "icon.png",
   "repository": {
