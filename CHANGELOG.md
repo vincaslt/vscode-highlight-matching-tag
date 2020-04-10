@@ -1,6 +1,6 @@
 # Change Log
 
-All notable changes to the "higlight-matching-tag" extension will be documented in this file.
+All notable changes to the "highlight-matching-tag" extension will be documented in this file.
 
 ### 0.9.6
 

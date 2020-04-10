@@ -581,15 +581,15 @@
     "lint:fix": "tslint -c ./tslint.json -p ./tsconfig.json --format stylish --fix"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.7",
-    "@types/moo": "^0.4.2",
-    "@types/node": "^10.12.10",
-    "mocha": "^6.2.2",
-    "prettier": "^1.19.1",
-    "tslint": "^5.20.1",
+    "@types/mocha": "^7.0.2",
+    "@types/moo": "^0.5.3",
+    "@types/node": "^13.11.1",
+    "mocha": "^7.1.1",
+    "prettier": "^2.0.4",
+    "tslint": "^6.1.1",
     "tslint-config-prettier": "^1.18.0",
-    "tslint-plugin-prettier": "^2.0.1",
-    "typescript": "^3.7.3",
+    "tslint-plugin-prettier": "^2.3.0",
+    "typescript": "^3.8.3",
     "vscode": "^1.1.36"
   },
   "prettier": {
@@ -598,6 +598,6 @@
     "printWidth": 100
   },
   "dependencies": {
-    "moo": "^0.5.0"
+    "moo": "^0.5.1"
   }
 }
