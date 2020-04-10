@@ -1,21 +1,28 @@
+<p align="center">
+  <img src="https://images2.imgbox.com/c6/c3/sLkQluHb_o.png">
+</p>
+
+<p align="center">
+<a title="Average rating" href="https://marketplace.visualstudio.com/items?itemName=vincaslt.highlight-matching-tag#review-details">
+<img src="https://vsmarketplacebadge.apphb.com/rating-star/vincaslt.highlight-matching-tag.svg?style=for-the-badge&colorA=facf37&colorB=ebb521">
+</a>
+<a title="Unique downloads" href="https://marketplace.visualstudio.com/items?itemName=vincaslt.highlight-matching-tag">
+<img src="https://vsmarketplacebadge.apphb.com/downloads-short/vincaslt.highlight-matching-tag.svg?style=for-the-badge&colorA=a537fa&colorB=872aeb">
+</a>
+<br/>
+<a title="Become a VSCode expert">
+<img src="https://img.shields.io/badge/Supported%20by-VSCode%20Power%20User%20Course%20→-gray.svg?colorA=655BE1&colorB=4F44D6&style=for-the-badge">
+</a>
+</p>
+
 # VSCode Highlight Matching Tag
 
-![logo](https://i.imgbox.com/eZAMmnap.png)
+_GitHub repository:_ <https://github.com/vincaslt/vscode-highlight-matching-tag>
 
-Repo: <https://github.com/vincaslt/vscode-highlight-matching-tag>
+This extension highlights matching opening and/or closing tags. Optionally it also shows path to tag in the status bar.
+Even though VSCode has some basic tag matching, it's just that - basic. This extension will try to match tags anywhere: from tag attributes, inside of strings, any files, while also providing extensive styling options to customize how tags are highlighted.
 
-This extension is intended to provide the missing functionality that should be built-in out of the box in VSCode - to highlight matching opening or closing tags. Optionally it also shows path to tag in the status bar.
-
-Even though VSCode has implemented some basic matching recently, it's just that - basic. The built-in functionality is to match only from tag name and only for some file extensions. This extension will try to match from anywhere: tag attributes, from inside strings, any file, while also providing extensive styling options to customize how tags are highlighted.
-
-> With great power, comes great responsibility (-Albert Einstein 🤦)
-
-So I'm minimising it by supporting only what I work with:
-
-- Basic HTML
-- JSX
-
-Other flavors (vue, php, angular) should work, but there are no guarantees. Feel free to report the issues on them anyway.
+Officially supported markup: **HTML** and **JSX**. Other flavors (XML, Vue, Angular, PHP) should work, but there are no guarantees. Feel free to report the issues on them anyway.
 
 ## Features
 
