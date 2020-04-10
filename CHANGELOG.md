@@ -2,6 +2,10 @@
 
 All notable changes to the "highlight-matching-tag" extension will be documented in this file.
 
+### 0.9.7
+
+- Update README, Logo and dependencies.
+
 ### 0.9.6
 
 - Fix tags matching with tags in comments, by @helix026

@@ -5,15 +5,8 @@ import { findMatchingTag, getTagForPosition, getTagsForPosition } from './tagMat
 import { parseTags } from './tagParser'
 import TagStyler from './tagStyler'
 
-// TODO: default style is underline with tag's color from theme
+// TODO: highlighting scope (vertically)
 // TODO: disable default tag highlighting (active selections)
-
-/*
-TODO: Shortcuts
-  - Highlight path (all tags in path)
-
-TODO: Floating opening tag
-*/
 
 function updateTagStatusBarItem(
   status: vscode.StatusBarItem,
@@ -44,7 +37,7 @@ function updateTagStatusBarItem(
   }
 }
 
-function promptSettingsMigration() {
+function promptInfoMessage(oldVersion: string | undefined) {
   if (config.hasOldSettings) {
     vscode.window
       .showInformationMessage(
@@ -56,18 +49,41 @@ function promptSettingsMigration() {
         config.migrate(value === 'Keep')
       })
   }
+
+  if (oldVersion === '0.9.6') {
+    vscode.window
+      .showInformationMessage(
+        'Highlight Matching Tag is supported by VSCode Power User course. \n Become a VSCode expert!',
+        'Check it Out!',
+        'Dismiss'
+      )
+      .then((value: string) => {
+        if (value === 'Check it Out!') {
+          vscode.commands.executeCommand(
+            'vscode.open',
+            vscode.Uri.parse('https://a.paddle.com/v2/click/16413/111559?link=1227')
+          )
+        }
+      })
+  }
 }
 
 export function activate(context: vscode.ExtensionContext) {
   // Updates version for future migrations
   const extension = vscode.extensions.getExtension('vincaslt.highlight-matching-tag')
-  const currentVersion: string | undefined = extension && extension.packageJSON.version
+  const oldVersion: string | undefined = context.globalState.get('hmtVersion')
+  const newVersion: string | undefined = extension && extension.packageJSON.version
 
   // Settings may be updated asynchronously, so version update may need to be moved to after settings are checked
-  config.configure({ context, onEditorChange: promptSettingsMigration })
+  config.configure({
+    context,
+    onEditorChange() {
+      promptInfoMessage(oldVersion)
+    },
+  })
 
   // Can get previous version, by reading it from hmtVersion global state, as it will be updated only here
-  context.globalState.update('hmtVersion', currentVersion)
+  context.globalState.update('hmtVersion', newVersion)
 
   const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 120)
   const tagStyler = new TagStyler()
@@ -78,7 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
   let tagsList: hmt.PartialMatch[] = []
 
   context.subscriptions.push(
-    vscode.window.onDidChangeTextEditorSelection(evt => {
+    vscode.window.onDidChangeTextEditorSelection((evt) => {
       const editor = evt.textEditor
 
       if (!config.isEnabled || !editor || editor !== vscode.window.activeTextEditor) {
@@ -101,17 +117,17 @@ export function activate(context: vscode.ExtensionContext) {
       let matches = []
       if (config.highlightFromContent) {
         matches = editor.selections
-          .map(sel =>
+          .map((sel) =>
             getTagForPosition(
               tagsList,
               editor.document.offsetAt(sel.active),
               config.highlightSelfClosing
             )
           )
-          .filter(match => match !== undefined)
+          .filter((match) => match !== undefined)
       } else {
         matches = editor.selections
-          .map(sel =>
+          .map((sel) =>
             findMatchingTag(
               tagsList,
               editor.document.offsetAt(sel.active),
@@ -120,11 +136,11 @@ export function activate(context: vscode.ExtensionContext) {
             )
           )
           .filter(
-            match => match && (match.opening !== match.closing || config.highlightSelfClosing)
+            (match) => match && (match.opening !== match.closing || config.highlightSelfClosing)
           )
       }
 
-      matches.forEach(match => tagStyler.decoratePair(match as hmt.Match, editor))
+      matches.forEach((match) => tagStyler.decoratePair(match as hmt.Match, editor))
     })
   )
 

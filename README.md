@@ -10,7 +10,7 @@
 <img src="https://vsmarketplacebadge.apphb.com/downloads-short/vincaslt.highlight-matching-tag.svg?style=for-the-badge&colorA=a537fa&colorB=872aeb">
 </a>
 <br/>
-<a title="Become a VSCode expert">
+<a title="Become a VSCode expert" href="https://a.paddle.com/v2/click/16413/111559?link=1227">
 <img src="https://img.shields.io/badge/Supported%20by-VSCode%20Power%20User%20Course%20→-gray.svg?colorA=655BE1&colorB=4F44D6&style=for-the-badge">
 </a>
 </p>

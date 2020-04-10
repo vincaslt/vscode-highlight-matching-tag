@@ -1,8 +1,8 @@
 {
   "name": "highlight-matching-tag",
   "displayName": "Highlight Matching Tag",
-  "description": "Highlights matching closing or opening tag",
-  "version": "0.9.6",
+  "description": "Highlights matching closing and opening tags",
+  "version": "0.9.7",
   "publisher": "vincaslt",
   "icon": "icon.png",
   "repository": {
@@ -13,6 +13,14 @@
     "url": "https://github.com/vincaslt/vscode-highlight-matching-tag/issues"
   },
   "license": "MIT",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test",
+    "lint:fix": "tslint -c ./tslint.json -p ./tsconfig.json --format stylish --fix"
+  },
   "engines": {
     "vscode": "^1.15.0"
   },
@@ -536,26 +544,6 @@
           "required": [
             "opening"
           ]
-        },
-        "highlight-matching-tag.style": {
-          "description": "Removed in 0.8.0, use styles",
-          "scope": "resource"
-        },
-        "highlight-matching-tag.leftStyle": {
-          "description": "Removed in 0.8.0, use styles",
-          "scope": "resource"
-        },
-        "highlight-matching-tag.rightStyle": {
-          "description": "Removed in 0.8.0, use styles",
-          "scope": "resource"
-        },
-        "highlight-matching-tag.endingStyle": {
-          "description": "Removed in 0.8.0, use styles",
-          "scope": "resource"
-        },
-        "highlight-matching-tag.beginningStyle": {
-          "description": "Removed in 0.8.0, use styles",
-          "scope": "resource"
         }
       }
     },
@@ -571,14 +559,6 @@
         "category": "Highlight Matching Tag"
       }
     ]
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "node ./node_modules/vscode/bin/test",
-    "lint:fix": "tslint -c ./tslint.json -p ./tsconfig.json --format stylish --fix"
   },
   "devDependencies": {
     "@types/mocha": "^7.0.2",
