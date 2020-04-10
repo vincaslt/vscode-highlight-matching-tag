@@ -37,7 +37,7 @@ function updateTagStatusBarItem(
   }
 }
 
-function promptInfoMessage(oldVersion: string | undefined) {
+function promptSettingsMigration() {
   if (config.hasOldSettings) {
     vscode.window
       .showInformationMessage(
@@ -49,23 +49,6 @@ function promptInfoMessage(oldVersion: string | undefined) {
         config.migrate(value === 'Keep')
       })
   }
-
-  if (oldVersion === '0.9.6') {
-    vscode.window
-      .showInformationMessage(
-        'Highlight Matching Tag is supported by VSCode Power User course. \n Become a VSCode expert!',
-        'Check it Out!',
-        'Dismiss'
-      )
-      .then((value: string) => {
-        if (value === 'Check it Out!') {
-          vscode.commands.executeCommand(
-            'vscode.open',
-            vscode.Uri.parse('https://a.paddle.com/v2/click/16413/111559?link=1227')
-          )
-        }
-      })
-  }
 }
 
 export function activate(context: vscode.ExtensionContext) {
@@ -75,12 +58,7 @@ export function activate(context: vscode.ExtensionContext) {
   const newVersion: string | undefined = extension && extension.packageJSON.version
 
   // Settings may be updated asynchronously, so version update may need to be moved to after settings are checked
-  config.configure({
-    context,
-    onEditorChange() {
-      promptInfoMessage(oldVersion)
-    },
-  })
+  config.configure({ context, onEditorChange: promptSettingsMigration })
 
   // Can get previous version, by reading it from hmtVersion global state, as it will be updated only here
   context.globalState.update('hmtVersion', newVersion)
