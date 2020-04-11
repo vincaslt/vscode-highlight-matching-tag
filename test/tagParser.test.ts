@@ -1,6 +1,7 @@
 import * as assert from 'assert'
 import { defaultEmptyElements } from '../src/configuration'
 import { parseTags } from '../src/tagParser'
+import { PartialMatch } from '../src/interfaces'
 
 suite('TagParser Tests', () => {
   suite('Reported Test Cases', () => {
@@ -12,7 +13,7 @@ suite('TagParser Tests', () => {
         ">
       `.trim()
 
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'cfset', start: 0, end: 69 }
@@ -24,7 +25,7 @@ suite('TagParser Tests', () => {
     test('string attribute with escapes inside', () => {
       const data =
         '<cffile action="read" file="\\"#directory#\\"\\#fileName#" variable="localFile">'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'cffile', start: 0, end: 77 }
@@ -35,7 +36,7 @@ suite('TagParser Tests', () => {
 
     test('escaped string in attribute', () => {
       const data = '<div class=\\"myclass\\"></div>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 23 },
@@ -59,7 +60,7 @@ suite('TagParser Tests', () => {
         $('#tableconfigs tbody').html(lista);
       `.trim()
 
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'tr', start: 61, end: 65 },
@@ -106,7 +107,7 @@ suite('TagParser Tests', () => {
 
     test('function call as an attribute value', () => {
       const data = '<cfset someFileHash = hash(someFile, "SHA-512")>content</cfset>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'cfset', start: 0, end: 48 },
@@ -118,7 +119,7 @@ suite('TagParser Tests', () => {
 
     test('vue-js special syntax', () => {
       const data = '<element-tag @attr="f(x)" :special=special></element-tag>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'element-tag', start: 0, end: 43 },
@@ -130,7 +131,7 @@ suite('TagParser Tests', () => {
 
     test('xml namespaces', () => {
       const data = '<ns:element></ns:element>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'ns:element', start: 0, end: 12 },
@@ -142,7 +143,7 @@ suite('TagParser Tests', () => {
 
     test('dot separated tag name', () => {
       const data = '<ns.element></ns.element>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'ns.element', start: 0, end: 12 },
@@ -161,7 +162,7 @@ suite('TagParser Tests', () => {
           >
           </Carousel>
         `.trim()
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'Carousel', start: 0, end: 140 },
@@ -188,7 +189,7 @@ suite('TagParser Tests', () => {
             <!--- do something --->
           </cfif>
         `.trim()
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'cfset', start: 0, end: 48 },
@@ -218,7 +219,7 @@ suite('TagParser Tests', () => {
           </div>
         </div>
       `.trim()
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 5 },
@@ -264,7 +265,7 @@ suite('TagParser Tests', () => {
             <?php displayErrors($errors); ?>
           </div>
         `.trim()
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 27 },
@@ -278,19 +279,19 @@ suite('TagParser Tests', () => {
   suite('Basic Test Cases', () => {
     test('works with nothing passed', () => {
       const data = ''
-      const expected: hmt.PartialMatch[] = []
+      const expected: PartialMatch[] = []
       assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('works with just > symbol', () => {
       const data = '>'
-      const expected: hmt.PartialMatch[] = []
+      const expected: PartialMatch[] = []
       assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
     test('ignore non tag content', () => {
       const data = 'before<div>inside</div>after'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 6, end: 11 },
@@ -302,7 +303,7 @@ suite('TagParser Tests', () => {
 
     test('minimal self closing tag', () => {
       const data = '<div/>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 6 },
@@ -314,7 +315,7 @@ suite('TagParser Tests', () => {
 
     test('self closing tag with whitespace', () => {
       const data = 'nonimportant<div />nonimportant'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 12, end: 19 },
@@ -324,9 +325,26 @@ suite('TagParser Tests', () => {
       assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
+    test('self closing tags with attribute', () => {
+      const data = 'nonimportant<div attr={ignore} /><div attr={ignore}/>nonimportant'
+      const expected: PartialMatch[] = [
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'div', start: 12, end: 33 },
+          closing: { name: 'div', start: 12, end: 33 }
+        },
+        {
+          attributeNestingLevel: 0,
+          opening: { name: 'div', start: 33, end: 53 },
+          closing: { name: 'div', start: 33, end: 53 }
+        }
+      ]
+      assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
+    })
+
     test('simple opening and closing tag', () => {
       const data = '<div>content</div>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 5 },
@@ -338,7 +356,7 @@ suite('TagParser Tests', () => {
 
     test('simple nested tags', () => {
       const data = '<div><span><self-closing /></span></div>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 5 },
@@ -360,7 +378,7 @@ suite('TagParser Tests', () => {
 
     test('simple tag with attributes', () => {
       const data = '<div attribute attribute="value">content</div>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 33 },
@@ -372,7 +390,7 @@ suite('TagParser Tests', () => {
 
     test('simple tag with attributes', () => {
       const data = '<div attribute attribute="value">content</div>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 33 },
@@ -387,7 +405,7 @@ suite('TagParser Tests', () => {
     test('tag as an attribute value', () => {
       const data = '<div attribute={<span>content</span>}>content</div>'
 
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 38 },
@@ -411,7 +429,7 @@ suite('TagParser Tests', () => {
         )}>x content</x>
       `.trim()
 
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'x', start: 0, end: 97 },
@@ -438,7 +456,7 @@ suite('TagParser Tests', () => {
 
     test('React fragments', () => {
       const data = 'text<>content</>text'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: '', start: 4, end: 6 },
@@ -450,7 +468,7 @@ suite('TagParser Tests', () => {
 
     test('unopened tag', () => {
       const data = '<a><b></c></b></a>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'a', start: 0, end: 3 },
@@ -471,7 +489,7 @@ suite('TagParser Tests', () => {
 
     test('unclosed tag', () => {
       const data = '<div><input type="button"></div>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 5 },
@@ -488,7 +506,7 @@ suite('TagParser Tests', () => {
 
     test('unclosed tag inside attribute', () => {
       const data = '<div attr={<input type="button">}></div>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 34 },
@@ -505,7 +523,7 @@ suite('TagParser Tests', () => {
 
     test('unopened same tag inside attribute', () => {
       const data = '<div attr={</div>}></div>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 19 },
@@ -521,7 +539,7 @@ suite('TagParser Tests', () => {
 
     test('unopened same tag outside as attribute', () => {
       const data = '<div><a attr={</div>}></div>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 5 },
@@ -541,7 +559,7 @@ suite('TagParser Tests', () => {
 
     test('string as an attribute', () => {
       const data = '<div "string">content</div>'
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 14 },
@@ -557,7 +575,7 @@ suite('TagParser Tests', () => {
           <area><base><br><col><embed><hr><img><input><keygen><link><meta><param><source><track><wbr>
         </div>
       `.trim()
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 5 },
@@ -644,7 +662,7 @@ suite('TagParser Tests', () => {
 
     test('comparation not mistaken for tags', () => {
       const data = 'if (i<2) return 3>2'
-      const expected: hmt.PartialMatch[] = []
+      const expected: PartialMatch[] = []
       assert.deepEqual(parseTags(data, defaultEmptyElements), expected)
     })
 
@@ -654,7 +672,7 @@ suite('TagParser Tests', () => {
           <!-- </div> some text <div> -->
         </div>
       `.trim()
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 17 },
@@ -671,7 +689,7 @@ suite('TagParser Tests', () => {
           <Button whenClicked={this.onClick} ></Button>
         </div>
       `.trim()
-      const expected: hmt.PartialMatch[] = [
+      const expected: PartialMatch[] = [
         {
           attributeNestingLevel: 0,
           opening: { name: 'div', start: 0, end: 26 },

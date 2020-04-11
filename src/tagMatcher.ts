@@ -1,5 +1,7 @@
-// Checks if tag is is comparable with hmt.Match type (has opening and matching tags)
-function isTagPairValid(pair: hmt.PartialMatch): boolean {
+import { Match, PartialMatch, Tag } from './interfaces'
+
+// Checks if tag is is comparable with Match type (has opening and matching tags)
+function isTagPairValid(pair: PartialMatch): boolean {
   return (
     !!pair.closing &&
     !!pair.opening &&
@@ -9,11 +11,11 @@ function isTagPairValid(pair: hmt.PartialMatch): boolean {
 }
 
 export function findMatchingTag(
-  tagsList: hmt.PartialMatch[],
+  tagsList: PartialMatch[],
   position: number,
   matchFromName: boolean,
   matchFromAttributes: boolean
-): hmt.Match | undefined {
+): Match | undefined {
   for (let i = tagsList.length - 1; i >= 0; i--) {
     if (!isTagPairValid(tagsList[i])) {
       continue
@@ -38,8 +40,8 @@ export function findMatchingTag(
     if ((positionInName && matchFromName) || (positionInAttributes && matchFromAttributes)) {
       return {
         attributeNestingLevel: tagsList[i].attributeNestingLevel,
-        opening: tagsList[i].opening as hmt.Tag,
-        closing: tagsList[i].closing as hmt.Tag
+        opening: tagsList[i].opening as Tag,
+        closing: tagsList[i].closing as Tag
       }
     }
   }
@@ -47,18 +49,19 @@ export function findMatchingTag(
   return undefined
 }
 
-export function getTagsForPosition(tagsList: hmt.PartialMatch[], position: number) {
+export function getTagsForPosition(tagsList: PartialMatch[], position: number) {
   return tagsList.filter(
-    pair => isTagPairValid(pair) && position > pair.opening!.start! && position < pair.closing!.end!
-  ) as hmt.Match[]
+    (pair) =>
+      isTagPairValid(pair) && position > pair.opening!.start! && position < pair.closing!.end!
+  ) as Match[]
 }
 
 export function getTagForPosition(
-  tagsList: hmt.PartialMatch[],
+  tagsList: PartialMatch[],
   position: number,
   includeSelfClosing = false
-): hmt.Match | undefined {
+): Match | undefined {
   return getTagsForPosition(tagsList, position)
-    .filter(tag => tag.opening !== tag.closing || includeSelfClosing)
+    .filter((tag) => tag.opening !== tag.closing || includeSelfClosing)
     .slice(-1)[0]
 }

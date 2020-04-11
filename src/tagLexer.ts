@@ -25,7 +25,7 @@ const blockState = (closingChar: string): moo.Rules => {
 export default moo.states({
   main: {
     // Try to match comment
-    commentOpening: {match: /(?:[\s]*?)(?:<!--|{\/\*)/, push: 'inComment' },
+    commentOpening: { match: /(?:[\s]*?)(?:<!--|{\/\*)/, push: 'inComment' },
 
     // Try to match anything that looks like a tag
     tagOpening: { match: /<(?!\/)(?=>|\w)[\w-.:]*(?=[^]*>)(?=\s|\/?>)/, push: 'inTag' },
@@ -39,11 +39,11 @@ export default moo.states({
     ignoreTheRest: { match: /[^]+/, lineBreaks: true }
   },
   inComment: {
-    closeComment: { match: /(?:[^]*?)(?:-->|\*\/})/, pop: 1}
+    closeComment: { match: /(?:[^]*?)(?:-->|\*\/})/, pop: 1 }
   },
   inTag: {
     // Closes tag and returns to main state
-    tagSelfClose: { match: /\/>/, pop: 1 },
+    tagSelfClose: { match: /\/+>/, pop: 1 },
 
     // Closes tag and returns to main state
     closeTag: { match: />/, pop: 1 },
@@ -85,11 +85,11 @@ export default moo.states({
     parenthesisOpen: { match: /\(/, push: 'parenthesis' },
     squareBracketsOpen: { match: /\[/, push: 'squareBrackets' },
 
-    // Presumably number or function call attribute value
-    value: { match: /[^\s>\{\[\(\'\")]+/ },
-
     // Pop the state, there is no value after this point
-    tagValueOver: { match: /(?=[\s>])/, lineBreaks: true, pop: 1 }
+    tagValueOver: { match: /(?=\/+>)|(?=[\s>])/, lineBreaks: true, pop: 1 },
+
+    // Presumably number or function call attribute value
+    value: { match: /[^\s>\{\[\(\'\")]+/ }
   },
   brackets: blockState('}'),
   parenthesis: blockState(')'),

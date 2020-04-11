@@ -1,12 +1,13 @@
 import * as assert from 'assert'
 import { findMatchingTag, getTagForPosition } from '../src/tagMatcher'
 import { parseTags } from '../src/tagParser'
+import { Match } from '../src/interfaces'
 
 suite('TagMatcher Tests', () => {
   suite('findMatchingTag Tests', () => {
     test('can match from opening and closing tag', () => {
       const data = parseTags('<a>a</a>')
-      const expected: hmt.Match = {
+      const expected: Match = {
         attributeNestingLevel: 0,
         opening: { name: 'a', start: 0, end: 3 },
         closing: { name: 'a', start: 4, end: 8 }
@@ -24,7 +25,7 @@ suite('TagMatcher Tests', () => {
 
     test('can match nested with invalid tags', () => {
       const data = parseTags('<a><b></c></b>')
-      const expected: hmt.Match = {
+      const expected: Match = {
         attributeNestingLevel: 0,
         opening: { name: 'b', start: 3, end: 6 },
         closing: { name: 'b', start: 10, end: 14 }
@@ -60,7 +61,7 @@ suite('TagMatcher Tests', () => {
   suite('getTagForPosition Tests', () => {
     test('can match tag from content', () => {
       const data = parseTags('<a>a</a>')
-      const expected: hmt.Match = {
+      const expected: Match = {
         attributeNestingLevel: 0,
         opening: { name: 'a', start: 0, end: 3 },
         closing: { name: 'a', start: 4, end: 8 }
@@ -87,7 +88,7 @@ suite('TagMatcher Tests', () => {
 
     test('matches self closing tag when flag is true', () => {
       const data = parseTags('a<a/>a')
-      const expected: hmt.Match = {
+      const expected: Match = {
         attributeNestingLevel: 0,
         opening: { name: 'a', start: 1, end: 5 },
         closing: { name: 'a', start: 1, end: 5 }

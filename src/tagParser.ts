@@ -1,9 +1,10 @@
 import lexer from './tagLexer'
+import { Tag, PartialMatch } from './interfaces'
 
 // Returns a list of partial tag pairs that exist in the given text
-export function parseTags(text: string, emptyElements: string[] = []): hmt.PartialMatch[] {
+export function parseTags(text: string, emptyElements: string[] = []): PartialMatch[] {
   // Here the tags will be put as they are resolved
-  const workingList: hmt.PartialMatch[] = []
+  const workingList: PartialMatch[] = []
 
   // Looks for last unclosed opening tag, e.g. <div attr=""
   const closeLastOpening = (endPosition: number) => {
@@ -22,8 +23,8 @@ export function parseTags(text: string, emptyElements: string[] = []): hmt.Parti
     Closes any unclosed tags in between;
     Closes the matching tag;
   */
-  const closeMatchingOpeningTag = (closingTag: hmt.Tag, nestingLevel: number) => {
-    const unclosedPairs: hmt.PartialMatch[] = []
+  const closeMatchingOpeningTag = (closingTag: Tag, nestingLevel: number) => {
+    const unclosedPairs: PartialMatch[] = []
 
     for (let i = workingList.length - 1; i >= 0; i--) {
       const openingTag = workingList[i].opening
@@ -51,7 +52,7 @@ export function parseTags(text: string, emptyElements: string[] = []): hmt.Parti
 
   // Every block inside of attribute has higher level, to avoid matching with outside
   let attributeNestingLevel = 0
-  let lastOpening: hmt.Tag
+  let lastOpening: Tag
 
   lexer.reset(text)
   let match = lexer.next()
@@ -68,14 +69,14 @@ export function parseTags(text: string, emptyElements: string[] = []): hmt.Parti
         attributeNestingLevel += 1
         break
       case 'closeTag':
-        lastOpening = closeLastOpening(match.offset + 1) as hmt.Tag
+        lastOpening = closeLastOpening(match.offset + 1) as Tag
         attributeNestingLevel -= 1
         if (emptyElements.includes(lastOpening.name)) {
           closeMatchingOpeningTag(lastOpening, attributeNestingLevel)
         }
         break
       case 'tagSelfClose':
-        lastOpening = closeLastOpening(match.offset + 2) as hmt.Tag
+        lastOpening = closeLastOpening(match.offset + 2) as Tag
         attributeNestingLevel -= 1
         closeMatchingOpeningTag(lastOpening, attributeNestingLevel)
         break

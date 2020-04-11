@@ -1,24 +1,10 @@
 {
-  "extends": [
-    "tslint:latest",
-    "tslint-config-prettier",
-    "tslint-plugin-prettier"
-  ],
+  "extends": ["tslint:latest", "tslint-config-prettier", "tslint-plugin-prettier"],
   "rules": {
     "prettier": true,
-    "interface-name": [
-      true,
-      "never-prefix"
-    ],
-    "no-implicit-dependencies": [
-      true,
-      "dev"
-    ],
+    "interface-name": [true, "never-prefix"],
+    "no-implicit-dependencies": [true, "dev"],
     "object-literal-sort-keys": false,
-    "quotemark": [
-      true,
-      "single",
-      "avoid-template"
-    ]
+    "quotemark": [true, "single", "avoid-template"]
   }
 }

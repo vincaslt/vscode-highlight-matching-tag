@@ -575,7 +575,9 @@
   "prettier": {
     "singleQuote": true,
     "semi": false,
-    "printWidth": 100
+    "printWidth": 100,
+    "endOfLine": "auto",
+    "trailingComma": "none"
   },
   "dependencies": {
     "moo": "^0.5.1"

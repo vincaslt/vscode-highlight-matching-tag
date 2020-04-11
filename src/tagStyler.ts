@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import config from './configuration'
+import { Match, Tag } from './interfaces'
 
 interface Decoration {
   highlight?: string | vscode.ThemeColor
@@ -27,7 +28,7 @@ export default class TagStyler {
 
   private activeDecorations: vscode.TextEditorDecorationType[] = []
 
-  public decoratePair = (pair: hmt.Match, editor: vscode.TextEditor) => {
+  public decoratePair = (pair: Match, editor: vscode.TextEditor) => {
     this.decorateTag(pair.opening, this.config.opening, editor, true)
 
     if (pair.opening.start !== pair.closing.start) {
@@ -36,12 +37,12 @@ export default class TagStyler {
   }
 
   public clearDecorations() {
-    this.activeDecorations.forEach(decoration => decoration.dispose())
+    this.activeDecorations.forEach((decoration) => decoration.dispose())
     this.activeDecorations = []
   }
 
   private decorateTag(
-    tag: hmt.Tag,
+    tag: Tag,
     decorations: TagDecorations,
     editor: vscode.TextEditor,
     isOpening: boolean

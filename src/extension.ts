@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import { Match, PartialMatch } from './interfaces'
 import { jumpToMatchingTag, selectPairContents } from './commands'
 import config from './configuration'
 import { findMatchingTag, getTagForPosition, getTagsForPosition } from './tagMatcher'
@@ -10,7 +11,7 @@ import TagStyler from './tagStyler'
 
 function updateTagStatusBarItem(
   status: vscode.StatusBarItem,
-  tagsList: hmt.PartialMatch[],
+  tagsList: PartialMatch[],
   position: number
 ) {
   const tagsForPosition = getTagsForPosition(tagsList, position)
@@ -68,7 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
   status.tooltip = 'Path to tag'
 
   let editorText: string = ''
-  let tagsList: hmt.PartialMatch[] = []
+  let tagsList: PartialMatch[] = []
 
   context.subscriptions.push(
     vscode.window.onDidChangeTextEditorSelection((evt) => {
@@ -117,7 +118,7 @@ export function activate(context: vscode.ExtensionContext) {
           )
       }
 
-      matches.forEach((match) => tagStyler.decoratePair(match as hmt.Match, editor))
+      matches.forEach((match) => tagStyler.decoratePair(match as Match, editor))
     })
   )
 

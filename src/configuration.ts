@@ -17,7 +17,7 @@ const defaultEmptyElements = [
   'param',
   'source',
   'track',
-  'wbr',
+  'wbr'
 ]
 
 interface ConfigurationOptions {
