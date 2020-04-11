@@ -2,6 +2,10 @@
 
 All notable changes to the "highlight-matching-tag" extension will be documented in this file.
 
+### 0.9.9
+
+- Fixes self closing tag highlighting when there is no space before `/>`
+
 ### 0.9.8
 
 - Removes affiliate link which for some reason was shown more than once. Sorry for that, it was a genuine mistake.
