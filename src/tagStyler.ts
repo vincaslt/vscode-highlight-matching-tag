@@ -17,8 +17,9 @@ interface TagDecorations {
 }
 
 export interface TagStylerConfig {
-  opening: TagDecorations
+  opening?: TagDecorations
   closing?: TagDecorations
+  inner?: Decoration
 }
 
 export default class TagStyler {
@@ -29,10 +30,29 @@ export default class TagStyler {
   private activeDecorations: vscode.TextEditorDecorationType[] = []
 
   public decoratePair = (pair: Match, editor: vscode.TextEditor) => {
-    this.decorateTag(pair.opening, this.config.opening, editor, true)
+    const openingDecoration = this.config.opening
+    const closingDecoration = this.config.closing || openingDecoration
+    const innerDecoration = this.config.inner
+
+    if (this.config.opening) {
+      this.decorateTag(pair.opening, this.config.opening, editor, true)
+    }
 
     if (pair.opening.start !== pair.closing.start) {
-      this.decorateTag(pair.closing, this.config.closing || this.config.opening, editor, false)
+      if (closingDecoration) {
+        this.decorateTag(pair.closing, closingDecoration, editor, false)
+      }
+
+      if (innerDecoration) {
+        this.applyDecoration(
+          editor,
+          innerDecoration,
+          new vscode.Range(
+            editor.document.positionAt(pair.opening.end),
+            editor.document.positionAt(pair.closing.start)
+          )
+        )
+      }
     }
   }
 

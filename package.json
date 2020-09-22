@@ -2,7 +2,7 @@
   "name": "highlight-matching-tag",
   "displayName": "Highlight Matching Tag",
   "description": "Highlights matching closing and opening tags",
-  "version": "0.9.9",
+  "version": "0.10.0",
   "publisher": "vincaslt",
   "icon": "icon.png",
   "repository": {
@@ -539,11 +539,61 @@
                   }
                 }
               }
+            },
+            "inner": {
+              "type": "object",
+              "description": "Styles for text between opening and closing tags.",
+              "properties": {
+                "highlight": {
+                  "type": "string",
+                  "description": "Background color"
+                },
+                "underline": {
+                  "type": "string",
+                  "description": "Underline color"
+                },
+                "surround": {
+                  "type": "string",
+                  "description": "Surrounding border's color"
+                },
+                "custom": {
+                  "type": "object",
+                  "description": "Custom CSS rules for styling. Properties are camelCase CSS properties or dark/light object with those CSS properties.",
+                  "properties": {
+                    "dark": {
+                      "type": "object",
+                      "description": "Custom CSS rules for dark themes",
+                      "patternProperties": {
+                        "^[a-z][a-zA-Z]*$": {
+                          "type": "string",
+                          "description": "Custom CSS rule"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "light": {
+                      "type": "object",
+                      "description": "Custom CSS rules for light themes",
+                      "patternProperties": {
+                        "^[a-z][a-zA-Z]*$": {
+                          "type": "string",
+                          "description": "Custom CSS rule"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "patternProperties": {
+                    "^[a-z][a-zA-Z]*$": {
+                      "type": "string",
+                      "description": "Custom CSS rule"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
             }
-          },
-          "required": [
-            "opening"
-          ]
+          }
         }
       }
     },

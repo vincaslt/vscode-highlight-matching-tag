@@ -67,24 +67,25 @@ Version 0.8.0 of this extension introduces new styling options, but old custom s
 
 Now you can change highlighting styles by providing your own style in User Settings (JSON) as `highlight-matching-tag.styles`. The setting accepts an object with two fields:
 
-- `opening` - opening tag styles when highlighting (or both, if closing style is not provided)
-- `closing` - closing tag styles, optional
+- **opening: _Style_** - opening tag styles when highlighting (or both, if closing style is not provided)
+- **closing: _Style_** - closing tag styles, optional
+- **inner: _Decoration_** - styles of text between opening and closing tags, optional
 
-Each of the above are **_Style_** objects that can have any combination of fields defining styles for parts of the tag:
+**_Style_** objects can have any combination of fields defining styles for parts of the tag:
 
-- `name` - decoration for name part of tag
-- `left` - decoration for left side of tag (character <)
-- `right` - decoration for right side of tag (character >)
-- `full` - decoration for the whole tag (including < and >)
+- **name: _Decoration_** - decoration for name part of tag
+- **left: _Decoration_** - decoration for left side of tag (character <)
+- **right: _Decoration_** - decoration for right side of tag (character >)
+- **full: _Decoration_** - decoration for the whole tag (including < and >)
 
-Each of the above are **_Decoration_** objects that define tag's style with optional fields:
+**_Decoration_** objects define tag's style with optional fields:
 
-- `highlight` - background color (e.g. "#666666")
-- `underline` - underline color
-- `surround` - surrounding border's color
-- `custom` - custom css rules for styling ([`vscode.DecorationRenderOptions`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions)). This is basically an object with camelCase CSS rules. It also can accept different styles for light or dark color themes.
+- **highlight: _string_** - background color (e.g. "#666666")
+- **underline: _string_** - underline color
+- **surround: _string_** - surrounding border's color
+- **custom: _vscode.DecorationRenderOptions_** - custom css rules for styling ([`vscode.DecorationRenderOptions`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions)). This is basically an object with camelCase CSS rules. It can also accept different styles for light or dark color themes.
 
-Colors used in gutter are the same as the ones used for highligting/underlining, or yellow by default for custom rules. You can change them by setting: `overviewRulerColor` decoration option to the color that you want.
+Colors used in gutter are the same as the ones used for highlighting/underlining, or yellow by default for custom rules. You can change them by setting: `overviewRulerColor` decoration option to the color that you want.
 
 ### Styling Examples
 
