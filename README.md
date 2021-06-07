@@ -10,9 +10,13 @@
 <img src="https://vsmarketplacebadge.apphb.com/downloads-short/vincaslt.highlight-matching-tag.svg?style=for-the-badge&colorA=a537fa&colorB=872aeb">
 </a>
 <br/>
-<a title="Become a VSCode expert" href="https://a.paddle.com/v2/click/16413/111559?link=1227">
+<a title="Become a VSCode expert" href="https://a.paddle.com/v2/click/16413/111559?link=1227" targer="_blank">
 <img src="https://img.shields.io/badge/Supported%20by-VSCode%20Power%20User%20Course%20→-gray.svg?colorA=655BE1&colorB=4F44D6&style=for-the-badge">
 </a>
+</p>
+
+<p align="center">
+<i>Everyone occasionally envies their colleague the amazing speed at which they seem to move around in their IDE. <br/> We recommend a <a title="Become a VSCode expert" href="https://a.paddle.com/v2/click/16413/111559?link=1227" targer="_blank">VSCode Power User Course</a>, so that you can be the expert <br/> who stuns everyone with their efficiency and speed.</i>
 </p>
 
 # VSCode Highlight Matching Tag
