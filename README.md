@@ -4,10 +4,10 @@
 
 <p align="center">
 <a title="Average rating" href="https://marketplace.visualstudio.com/items?itemName=vincaslt.highlight-matching-tag#review-details">
-<img src="https://vsmarketplacebadge.apphb.com/rating-star/vincaslt.highlight-matching-tag.svg?style=for-the-badge&colorA=facf37&colorB=ebb521">
+<img src="https://img.shields.io/visual-studio-marketplace/r/vincaslt.highlight-matching-tag?style=flat-square">
 </a>
 <a title="Unique downloads" href="https://marketplace.visualstudio.com/items?itemName=vincaslt.highlight-matching-tag">
-<img src="https://vsmarketplacebadge.apphb.com/downloads-short/vincaslt.highlight-matching-tag.svg?style=for-the-badge&colorA=a537fa&colorB=872aeb">
+<img src="https://img.shields.io/visual-studio-marketplace/d/vincaslt.highlight-matching-tag?style=flat-square">
 </a>
 <br/>
 <a title="Master Web Development" href="https://a.paddle.com/v2/click/16413/111559?link=3267" targer="_blank">
