@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { Match, PartialMatch } from './interfaces'
-import { jumpToMatchingTag, selectPairContents } from './commands'
+import { jumpToMatchingTag, selectPair, selectPairContents } from './commands'
 import config from './configuration'
 import { findMatchingTag, getTagForPosition, getTagsForPosition } from './tagMatcher'
 import { parseTags } from './tagParser'
@@ -111,5 +111,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand('highlight-matching-tag.selectPairContents', selectPairContents)
+  )
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('highlight-matching-tag.selectPair', selectPair)
   )
 }

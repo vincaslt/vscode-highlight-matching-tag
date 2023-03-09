@@ -2,6 +2,10 @@
 
 All notable changes to the "highlight-matching-tag" extension will be documented in this file.
 
+### 0.11.0
+
+- Adds new command "Select matching tag pair".
+
 ### 0.10.0
 
 - Adds `inner` style option to control styling of text between tags.

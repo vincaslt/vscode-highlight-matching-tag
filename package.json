@@ -2,7 +2,7 @@
   "name": "highlight-matching-tag",
   "displayName": "Highlight Matching Tag",
   "description": "Highlights matching closing and opening tags",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "publisher": "vincaslt",
   "icon": "icon.png",
   "repository": {
@@ -606,6 +606,11 @@
       {
         "command": "highlight-matching-tag.selectPairContents",
         "title": "Select contents of matching tag pair",
+        "category": "Highlight Matching Tag"
+      },
+      {
+        "command": "highlight-matching-tag.selectPair",
+        "title": "Select matching tag pair",
         "category": "Highlight Matching Tag"
       }
     ]

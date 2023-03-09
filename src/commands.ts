@@ -63,3 +63,28 @@ export function selectPairContents() {
     vscode.window.showInformationMessage('No matching tag was found')
   }
 }
+
+export function selectPair() {
+  const editor = vscode.window.activeTextEditor
+
+  if (!editor) {
+    return
+  }
+
+  const tagsList = parseTags(editor.document.getText(), config.emptyElements)
+  const position = editor.selection.active
+  const positionOffset = editor.document.offsetAt(position)
+
+  const activePair = getTagForPosition(tagsList, positionOffset)
+
+  if (activePair) {
+    const openingTagStartPos = editor.document.positionAt(activePair.opening.start)
+    const closingTagEndPos = editor.document.positionAt(activePair.closing.end)
+
+    const tagContentSelection = new vscode.Selection(openingTagStartPos, closingTagEndPos)
+    editor.selection = tagContentSelection
+    editor.revealRange(tagContentSelection)
+  } else {
+    vscode.window.showInformationMessage('No matching tag was found')
+  }
+}
