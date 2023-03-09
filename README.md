@@ -10,17 +10,14 @@
 <img src="https://vsmarketplacebadge.apphb.com/downloads-short/vincaslt.highlight-matching-tag.svg?style=for-the-badge&colorA=a537fa&colorB=872aeb">
 </a>
 <br/>
-<a title="Write excellent content" href="https://a.paddle.com/v2/click/16413/111559?link=3267" targer="_blank">
-<img src="https://img.shields.io/badge/Supported%20by-Content%20for%20Developers%20Course%20%E2%86%92-gray.svg?colorA=253341&colorB=15202C&style=for-the-badge">
+<a title="Master Web Development" href="https://a.paddle.com/v2/click/16413/111559?link=3267" targer="_blank">
+<img src="https://img.shields.io/badge/Master%20Web%20Development-Try%20The%20Educative.io%20Platform%20→-gray.svg?colorA=655BE1&colorB=4F44D6&style=for-the-badge">
 </a>
 <br/>
-<a title="Become a VSCode expert" href="https://a.paddle.com/v2/click/16413/111559?link=1227" targer="_blank">
-<img src="https://img.shields.io/badge/Supported%20by-VSCode%20Power%20User%20Course%20→-gray.svg?colorA=655BE1&colorB=4F44D6&style=for-the-badge">
-</a>
 </p>
 
 <p align="center">
-<i>Everyone occasionally envies their colleague the amazing speed at which they seem to move around in their IDE. <br/> We recommend a <a title="Become a VSCode expert" href="https://a.paddle.com/v2/click/16413/111559?link=1227" targer="_blank">VSCode Power User Course</a>, so that you can be the expert <br/> who stuns everyone with their efficiency and speed.</i>
+<i>If you're serious about your software development career,<br/>There's no better platform to learn programming online than <a href="https://www.educative.io/explore?aff=Vp6m" targer="_blank">Educative.io</a>.<br />Their courses are excellent and your subscription supports this plugin.</i>
 </p>
 
 # VSCode Highlight Matching Tag
